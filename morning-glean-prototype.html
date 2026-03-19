@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morning Glean — March 19, 2026</title>
+<style>
+
+/* ════════════════════════════════════════════════════
+   DESIGN TOKENS — change anything here to restyle.
+   Nothing else in this file needs to be touched for
+   visual redesigns; everything references these vars.
+   ════════════════════════════════════════════════════ */
+:root {
+
+  /* ── Spectrum / ROYGBIV ──────────────────────────── */
+  --clr-r:  #E53030;   /* Red    — hot propaganda        */
+  --clr-o:  #E8790A;   /* Orange — advocacy-heavy        */
+  --clr-y:  #C9A800;   /* Yellow — mixed / medium        */
+  --clr-g:  #2A9D3A;   /* Green  — mostly solid          */
+  --clr-b:  #1A6FD6;   /* Blue   — strong journalism     */
+  --clr-i:  #3B2A8E;   /* Indigo — best achievable       */
+  --clr-v:  #6B21A8;   /* Violet — scripture only        */
+  --spectrum-gradient: linear-gradient(to right,
+    var(--clr-r), var(--clr-o), var(--clr-y),
+    var(--clr-g), var(--clr-b), var(--clr-i));
+
+  /* ── Page background & surface ──────────────────── */
+  --bg:           #F7F6F2;
+  --card-bg:      #FFFFFF;
+  --card-shadow:  0 1px 3px rgba(0,0,0,0.05);
+
+  /* ── Chrome (header / TOC / legend) ─────────────── */
+  --chrome-dark:      #111111;
+  --chrome-mid:       #1A1A1A;
+  --chrome-legend:    #242424;
+  --chrome-border:    #333333;
+
+  /* ── Text ────────────────────────────────────────── */
+  --text-primary:    #1A1A1A;
+  --text-secondary:  #4A4A4A;
+  --text-muted:      #6B7280;
+  --text-on-dark:    #FFFFFF;
+  --text-on-dark-2:  rgba(255,255,255,0.65);
+  --text-on-dark-3:  rgba(255,255,255,0.38);
+
+  /* ── Borders ─────────────────────────────────────── */
+  --border-light:  #E5E4DF;
+  --border-mid:    #D4D3CE;
+
+  /* ── Typography ──────────────────────────────────── */
+  --font-sans:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono:  'Courier New', monospace;
+  --font-size-base:  15px;
+  --line-height-base: 1.65;
+
+  /* ── Layout ──────────────────────────────────────── */
+  --content-max:    820px;
+  --content-pad-v:  36px;
+  --content-pad-h:  24px;
+  --radius:         10px;
+
+  /* ── Persistent rainbow stripe ───────────────────── */
+  --rainbow-h:  5px;
+
+  /* ── Full TOC ────────────────────────────────────── */
+  --toc-pad-h:      20px;
+  --toc-card-gap:   6px;
+  --toc-card-min:   140px;
+  --toc-card-max:   220px;
+
+  /* ── Mini-TOC (collapsed, sticky) ───────────────── */
+  --mini-toc-h:     34px;
+
+  /* ── Source block left-border ────────────────────── */
+  --src-border-w:  4px;
+
+  /* ── Fringe box ──────────────────────────────────── */
+  --fringe-bg:       #FDFBF0;
+  --fringe-border:   var(--clr-y);
+  --fringe-text:     #4a4020;
+  --fringe-label:    var(--clr-y);
+
+  /* ── Filter line ─────────────────────────────────── */
+  --filter-bg:    var(--bg);
+  --filter-text:  var(--text-muted);
+}
+
+/* ════════════════════════════════════════════════════
+   RESET & BASE
+   ════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family:   var(--font-sans);
+  font-size:     var(--font-size-base);
+  line-height:   var(--line-height-base);
+  color:         var(--text-primary);
+  background:    var(--bg);
+  /* Push content below: fixed rainbow-bar + fixed mini-toc when active */
+  padding-top:   calc(var(--rainbow-h));
+  padding-bottom: 80px;
+}
+
+a { color: inherit; }
+
+/* ════════════════════════════════════════════════════
+   FIXED RAINBOW BAR — always at very top of viewport
+   The "you are reading a spectrum" constant signal.
+   ════════════════════════════════════════════════════ */
+#rainbow-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--rainbow-h);
+  background: var(--spectrum-gradient);
+  z-index: 1000;
+}
+
+/* ════════════════════════════════════════════════════
+   MASTHEAD
+   ════════════════════════════════════════════════════ */
+.masthead {
+  background: var(--chrome-dark);
+  color: var(--text-on-dark);
+  padding: 28px 40px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+}
+.masthead-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.masthead-date {
+  font-size: 0.78rem;
+  color: var(--text-on-dark-2);
+  margin-top: 4px;
+}
+.masthead-sub {
+  font-size: 0.82rem;
+  color: var(--text-on-dark-3);
+  font-style: italic;
+  line-height: 1.5;
+  text-align: right;
+}
+
+/* ════════════════════════════════════════════════════
+   FULL TOC — visible at page top, not sticky itself.
+   The mini-TOC takes over on scroll.
+   ════════════════════════════════════════════════════ */
+#full-toc {
+  background: var(--chrome-mid);
+  border-bottom: 3px solid var(--chrome-border);
+  padding: 0 var(--toc-pad-h);
+}
+
+.spectrum-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0 2px;
+  font-size: 0.62rem;
+  color: var(--text-on-dark-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.toc-cards {
+  display: flex;
+  gap: var(--toc-card-gap);
+  padding: 10px 0 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.toc-cards::-webkit-scrollbar { display: none; }
+
+.toc-card {
+  flex: 1;
+  min-width: var(--toc-card-min);
+  max-width: var(--toc-card-max);
+  border-radius: 8px;
+  padding: 10px 12px 9px;
+  text-decoration: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: opacity 0.15s, transform 0.12s;
+}
+.toc-card:hover { opacity: 0.82; transform: translateY(-1px); }
+.toc-position {
+  font-size: 0.60rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-on-dark-2);
+}
+.toc-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-on-dark);
+  line-height: 1.25;
+}
+.toc-slug {
+  font-size: 0.65rem;
+  color: var(--text-on-dark-3);
+  font-style: italic;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+/* TOC card coloring: worst-actor color as left-border + tinted bg */
+.toc-r { border-left: 3px solid var(--clr-r); background: rgba(229,48,48,0.18); }
+.toc-o { border-left: 3px solid var(--clr-o); background: rgba(232,121,10,0.16); }
+.toc-y { border-left: 3px solid var(--clr-y); background: rgba(201,168,0,0.16); }
+.toc-g { border-left: 3px solid var(--clr-g); background: rgba(42,157,58,0.16); }
+.toc-b { border-left: 3px solid var(--clr-b); background: rgba(26,111,214,0.18); }
+.toc-i { border-left: 3px solid var(--clr-i); background: rgba(59,42,142,0.18); }
+
+/* ════════════════════════════════════════════════════
+   MINI-TOC — fixed, appears when full TOC scrolls away.
+   Newspaper inner-page "running header" analog.
+   Hidden by default; JS adds .visible class.
+   ════════════════════════════════════════════════════ */
+#mini-toc {
+  position: fixed;
+  top: var(--rainbow-h);   /* sits right below the rainbow bar */
+  left: 0;
+  right: 0;
+  height: var(--mini-toc-h);
+  background: var(--chrome-mid);
+  border-bottom: 1px solid var(--chrome-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  z-index: 900;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+#mini-toc.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.mini-pip {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  gap: 6px;
+  font-size: 0.63rem;
+  font-weight: 700;
+  color: var(--text-on-dark-2);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-right: 1px solid rgba(255,255,255,0.07);
+  transition: background 0.12s;
+  padding: 0 6px;
+}
+.mini-pip:last-child { border-right: none; }
+.mini-pip:hover { background: rgba(255,255,255,0.07); color: var(--text-on-dark); }
+
+.mini-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════════════════
+   LEGEND BAR
+   ════════════════════════════════════════════════════ */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 10px 40px 9px;
+  background: var(--chrome-legend);
+  align-items: center;
+  font-size: 0.68rem;
+  color: #aaa;
+  border-bottom: 1px solid #333;
+}
+.legend-title {
+  font-size: 0.60rem;
+  color: #ccc;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend-note {
+  margin-left: auto;
+  font-style: italic;
+  color: #666;
+  font-size: 0.62rem;
+}
+
+/* ════════════════════════════════════════════════════
+   MAIN CONTENT
+   ════════════════════════════════════════════════════ */
+.content {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--content-pad-v) var(--content-pad-h);
+}
+
+/* Scroll-margin accounts for fixed rainbow + mini-toc height */
+.topic-section {
+  margin-bottom: 56px;
+  scroll-margin-top: calc(var(--rainbow-h) + var(--mini-toc-h) + 18px);
+}
+
+/* ── Topic header ── */
+.topic-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--border-light);
+}
+.topic-badge {
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #fff;
+  line-height: 1;
+}
+.topic-badge .badge-sub {
+  font-size: 0.50rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-top: 2px;
+  opacity: 0.7;
+}
+.badge-r { background: var(--clr-r); }
+.badge-o { background: var(--clr-o); }
+.badge-y { background: var(--clr-y); color: var(--text-primary) !important; }
+.badge-g { background: var(--clr-g); }
+.badge-b { background: var(--clr-b); }
+.badge-i { background: var(--clr-i); }
+
+.topic-meta { flex: 1; }
+.topic-zone {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.topic-title {
+  font-size: 1.18rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+.topic-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+/* ── Source block ── */
+.source-block {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  /* Left border set per-class below */
+  border-left-width: var(--src-border-w);
+  border-left-style: solid;
+}
+.src-r { border-left-color: var(--clr-r); }
+.src-o { border-left-color: var(--clr-o); }
+.src-y { border-left-color: var(--clr-y); }
+.src-g { border-left-color: var(--clr-g); }
+.src-b { border-left-color: var(--clr-b); }
+.src-i { border-left-color: var(--clr-i); }
+
+.source-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 9px;
+  border-bottom: 1px solid var(--border-light);
+  background: rgba(0,0,0,0.015);
+}
+.source-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.source-name {
+  font-weight: 700;
+  font-size: 0.87rem;
+  flex: 1;
+  color: var(--text-primary);
+}
+.source-placement {
+  font-size: 0.64rem;
+  color: var(--text-muted);
+  background: var(--bg);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-style: italic;
+  white-space: nowrap;
+  border: 1px solid var(--border-light);
+}
+
+.source-body { padding: 12px 16px 14px; }
+
+.args { list-style: none; padding: 0; margin-bottom: 12px; }
+.args li {
+  padding: 4px 0 4px 16px;
+  position: relative;
+  font-size: 0.87rem;
+  line-height: 1.56;
+  color: var(--text-secondary);
+  border-bottom: 1px solid #f3f3f0;
+}
+.args li:last-child { border-bottom: none; }
+.args li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  top: 7px;
+}
+
+.filter-line {
+  font-size: 0.73rem;
+  font-family: var(--font-mono);
+  color: var(--filter-text);
+  background: var(--filter-bg);
+  padding: 7px 12px;
+  border-radius: 6px;
+  line-height: 1.5;
+}
+.filter-line strong { color: #555; }
+
+/* ── Fringe signal box ── */
+.fringe-box {
+  background: var(--fringe-bg);
+  border: 1px dashed var(--fringe-border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-top: 16px;
+  font-size: 0.82rem;
+  color: var(--fringe-text);
+  line-height: 1.56;
+}
+.fringe-label {
+  display: block;
+  font-size: 0.60rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fringe-label);
+  margin-bottom: 5px;
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  font-size: 0.70rem;
+  color: var(--text-muted);
+  padding: 24px;
+  border-top: 1px solid var(--border-light);
+  margin-top: 40px;
+  line-height: 1.8;
+}
+footer a { text-decoration: underline; color: var(--text-muted); }
+footer a:hover { color: var(--text-primary); }
+
+/* ════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════ */
+@media (max-width: 620px) {
+  .masthead { padding: 18px 16px 14px; flex-direction: column; align-items: flex-start; }
+  .masthead-sub { text-align: left; margin-top: 6px; }
+  .legend { padding: 8px 14px; }
+  .legend-note { display: none; }
+  #full-toc { padding: 0 10px; }
+  .toc-card { min-width: 120px; }
+  .content { padding: 20px 14px; }
+  .mini-pip .mini-label { display: none; }
+  .mini-pip { flex-direction: column; gap: 2px; font-size: 0.55rem; }
+}
+
+
+/* ════════════════════════════════════════════════════
+   READING LAYOUT — three tiers:
+   1. C alone   — narrow centered column
+   2. L1 + R1   — side-by-side pair (one step out)
+   3. L2 + R2   — side-by-side pair (two steps out)
+   ════════════════════════════════════════════════════ */
+
+/* ── Tier containers ── */
+.layout-center {
+  max-width: var(--content-max);   /* ~820px — focused, single col */
+  margin: 0 auto;
+  padding: var(--content-pad-v) var(--content-pad-h) 0;
+}
+
+.layout-pair {
+  max-width: 1180px;               /* wide enough for two columns */
+  margin: 0 auto;
+  padding: 0 var(--content-pad-h);
+}
+
+/* ── Step labels between tiers ── */
+.tier-label {
+  text-align: center;
+  font-size: 0.60rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  padding: 32px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tier-label::before,
+.tier-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-light);
+}
+
+/* ── Two-column grid for L/R pairs ── */
+.topic-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding-bottom: 48px;
+}
+
+/* Subtle vertical rule between columns */
+.topic-pair > .topic-section:first-child {
+  border-right: 1px solid var(--border-light);
+  padding-right: 28px;
+}
+.topic-pair > .topic-section:last-child {
+  padding-left: 0;
+}
+
+/* Tighten topic-title font in columns (less horizontal room) */
+.topic-pair .topic-title {
+  font-size: 1.0rem;
+}
+.topic-pair .topic-badge {
+  width: 44px;
+  height: 44px;
+  font-size: 0.9rem;
+}
+
+/* ── Responsive: stack columns on small screens ── */
+@media (max-width: 860px) {
+  .topic-pair {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .topic-pair > .topic-section:first-child {
+    border-right: none;
+    padding-right: 0;
+    border-bottom: 2px dashed var(--border-light);
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+  }
+  .layout-pair {
+    padding: 0 14px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     FIXED RAINBOW BAR
+     Always at top. The minimum persistent spectrum signal.
+     Research basis: like the newspaper masthead — never
+     disappears, never dominates. 5px of constant context.
+     ═══════════════════════════════════════════════════ -->
+<div id="rainbow-bar" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     MINI-TOC (fixed, appears when full TOC scrolls away)
+     "Running header" analog — newspaper inner-page model.
+     Keeps spectrum context visible without dominating.
+     JS adds/removes .visible class.
+     ═══════════════════════════════════════════════════ -->
+<nav id="mini-toc" aria-label="Spectrum navigation">
+  <a href="#topic-minus2" class="mini-pip">
+    <span class="mini-dot" style="background:var(--clr-r)"></span>
+    <span class="mini-label">L2 · Oscars</span>
+  </a>
+  <a href="#topic-minus1" class="mini-pip">
+    <span class="mini-dot" style="background:var(--clr-o)"></span>
+    <span class="mini-label">L1 · Displaced</span>
+  </a>
+  <a href="#topic-zero" class="mini-pip">
+    <span class="mini-dot" style="background:var(--clr-o)"></span>
+    <span class="mini-label">C · Economy</span>
+  </a>
+  <a href="#topic-plus1" class="mini-pip">
+    <span class="mini-dot" style="background:var(--clr-o)"></span>
+    <span class="mini-label">R1 · Robots</span>
+  </a>
+  <a href="#topic-plus2" class="mini-pip">
+    <span class="mini-dot" style="background:var(--clr-y)"></span>
+    <span class="mini-label">R2 · Petrodollar</span>
+  </a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     MASTHEAD
+     ═══════════════════════════════════════════════════ -->
+<header class="masthead">
+  <div>
+    <div class="masthead-title">☀ Morning Glean</div>
+    <div class="masthead-date">Thursday, March 19, 2026</div>
+  </div>
+  <div class="masthead-sub">
+    Per-author perspectives across the spectrum.<br>
+    No synthesis. Apply your own judgment.<br>
+    15-hour scan · American Empire scope
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════
+     FULL TOC — not sticky; mini-TOC takes over on scroll.
+     ═══════════════════════════════════════════════════ -->
+<nav id="full-toc" aria-label="Topic spectrum (full)">
+  <div class="spectrum-labels">
+    <span>◀ L2 · Far Left</span>
+    <span>L1 · Left–Center</span>
+    <span>C · Center</span>
+    <span>R1 · Right–Center</span>
+    <span>R2 · Far Right ▶</span>
+  </div>
+  <div class="toc-cards">
+
+    <a href="#topic-minus2" class="toc-card toc-r">
+      <span class="toc-position">L2 · Far Left</span>
+      <span class="toc-label">Oscars as Wartime Ritual</span>
+      <span class="toc-slug">Cultural dissent &amp; the limits of Hollywood resistance</span>
+    </a>
+
+    <a href="#topic-minus1" class="toc-card toc-o">
+      <span class="toc-position">L1 · Left–Center</span>
+      <span class="toc-label">3.2M Displaced Iranians</span>
+      <span class="toc-slug">Refugee crisis missing from U.S. front pages</span>
+    </a>
+
+    <a href="#topic-zero" class="toc-card toc-o">
+      <span class="toc-position">C · Center</span>
+      <span class="toc-label">The Kitchen Table War</span>
+      <span class="toc-slug">0.7% GDP · Confidence drops · Gas at $4.50</span>
+    </a>
+
+    <a href="#topic-plus1" class="toc-card toc-o">
+      <span class="toc-position">R1 · Right–Center</span>
+      <span class="toc-label">Humanoid Robots Go Mass-Market</span>
+      <span class="toc-slug">Figure AI $48B · OpenAI $1T IPO · LeCun's JEPA</span>
+    </a>
+
+    <a href="#topic-plus2" class="toc-card toc-y">
+      <span class="toc-position">R2 · Far Right</span>
+      <span class="toc-label">Petrodollar Unraveling</span>
+      <span class="toc-slug">Saudi yuan oil · Gold $5K · Hormuz as monetary weapon</span>
+    </a>
+
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════
+     LEGEND
+     ═══════════════════════════════════════════════════ -->
+<div class="legend" role="complementary" aria-label="Color key">
+  <span class="legend-title">Filter →</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--clr-r)"></span> Red — propaganda</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--clr-o)"></span> Orange — advocacy</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--clr-y)"></span> Yellow — mixed</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--clr-g)"></span> Green — solid</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--clr-b)"></span> Blue — strong journalism</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--clr-i)"></span> Indigo — best achievable</span>
+  <span class="legend-item" style="opacity:0.4"><span class="legend-dot" style="background:var(--clr-v)"></span> Violet — scripture only</span>
+  <span class="legend-note">TOC card color = worst actor in that topic · left border = each source's rating</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CONTENT
+     Reading order: C alone → L1/R1 pair → L2/R2 pair
+     Visual logic: start at the center of gravity,
+     then expand outward one step, then two steps.
+     ═══════════════════════════════════════════════════ -->
+<main>
+
+  <!-- ── Tier 1: Center alone ── -->
+  <div class="layout-center">
+    <section id="topic-zero" class="topic-section">
+    <div class="topic-header">
+      <div class="topic-badge badge-o">C<div class="badge-sub">Center</div></div>
+      <div class="topic-meta">
+        <div class="topic-zone">Domestic Economy · Kitchen Table</div>
+        <div class="topic-title">The Kitchen Table War: 0.7% GDP, Consumer Confidence Hits Lows, Gas Above $4.50</div>
+        <div class="topic-desc">The most average story of the morning — the domestic economic consequence of a war most Americans nominally support but are beginning to feel in their wallets.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-i">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-i)"></span>
+        <span class="source-name">CNN Business / FRED / BLS / Conference Board</span>
+        <span class="source-placement">center</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>U.S. GDP grew at an annualized 0.7% in Q4 2025, down from 4.4% in Q3 — sharpest one-quarter deceleration since 2022. War began after collection; Q1 2026 will be the first data to capture it.</li>
+          <li>Consumer Confidence dropped to 55.5 in March (Conference Board), lowest in three months. Most cited cause: gas prices above $4.50/gallon nationally as Brent crude holds above $110.</li>
+          <li>Hiring added only 79,000 jobs in Q4 2025. Pre-war momentum was already weakening.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — government statistical data, named institutions. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: yes (notes spending holding even as confidence falls — split signal).</div>
+      </div>
+    </div>
+
+    <div class="source-block src-b">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-b)"></span>
+        <span class="source-name">KPMG / Conference Board economic analysis</span>
+        <span class="source-placement">center-right business</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>"Two faces of the economy": services and government spending provide a floor, but goods-producing industries and consumer retail are softening rapidly. Mild recession in 2026 is now the modal forecast.</li>
+          <li>The war's oil shock acts like a tax on every American household — each $10/barrel increase costs ~$200/year. At current prices: $400–600 per household annually.</li>
+          <li>The Fed is in a bind: inflation is supply-shock (oil), not demand-driven — raising rates would crush an already slowing economy without addressing the energy-price cause.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong. Rhetoric: mild concern framing. Sourcing transparent. Engages counterarguments: yes.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-y">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-y)"></span>
+        <span class="source-name">Democratic politicians / Progressive economists</span>
+        <span class="source-placement">center-left</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>$860B war launched without a supplemental appropriations bill — deficit-financed at $1–2B/day on top of debt already at 125% of GDP. Future generations handed a compounding bill.</li>
+          <li>"Trickle-up wartime economics": defense contractor stocks at record highs; median household purchasing power falling in real terms. War redistributing wealth upward under cover of patriotism.</li>
+          <li>Congress has not passed a war authorization or supplemental budget — executive branch spending at will with no legislative check.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — deficit financing and purchasing power claims factually grounded; "trickle-up" is advocacy language. Rhetoric: class framing, moral appeal. Sourcing partially transparent. Engages counterarguments: partially.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-o">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-o)"></span>
+        <span class="source-name">Trump administration / supply-side economists</span>
+        <span class="source-placement">far-right</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Economy in a "temporary adjustment phase" caused by a necessary war. Post-war reconstruction, weakened Iran lifting a terror premium, and energy normalization will drive a boom in H2 2026.</li>
+          <li>Gas prices are a short-term cost of long-term security. Americans paid more in Korea, Vietnam, and Iraq — this war is measured in weeks, not years.</li>
+          <li>The 0.7% GDP figure is pre-war data. Victory will produce a "peace dividend" in the form of lower long-term geopolitical risk premia.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — post-war boom thesis entirely speculative; "victory" undefined. Rhetoric: false-equivalence with longer wars, future-casting without evidence. Sourcing partial. Engages counterarguments: no.</div>
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <!-- ── Step label ── -->
+  <p class="tier-label layout-pair">One step out from center</p>
+
+  <!-- ── Tier 2: L1 + R1 side by side ── -->
+  <div class="layout-pair">
+    <div class="topic-pair">
+      <section id="topic-minus1" class="topic-section">
+    <div class="topic-header">
+      <div class="topic-badge badge-o">L1<div class="badge-sub">Left–Ctr</div></div>
+      <div class="topic-meta">
+        <div class="topic-zone">Humanitarian · International Aid &amp; Diaspora Press</div>
+        <div class="topic-title">3.2 Million Displaced: Iran's Internal Refugee Crisis &amp; the Regional Containment Failure</div>
+        <div class="topic-desc">The humanitarian story tracked by center-left outlets and international aid organizations — largely absent from U.S. mainstream front pages.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-i">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-i)"></span>
+        <span class="source-name">UNHCR / Al Jazeera / Baker Institute</span>
+        <span class="source-placement">center-left · international</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>UNHCR confirmed 3.2 million Iranians internally displaced since Feb. 28 — the largest single-country displacement event since peak Syria. Primarily fleeing Tehran northward.</li>
+          <li>Iraqi Kurdistan reopened crossing but only for ethnic Kurds with family ties — the vast majority of displaced Iranians have no viable external route.</li>
+          <li>236 health care sites and 498 schools struck (Just Security). Healthcare in western Iran near-collapse.</li>
+          <li>Iran's neighbors — Turkey, Iraq, Pakistan, Afghanistan — are themselves fragile states with existing refugee burdens. No Turkey-2016-style buffer capacity in this geography.</li>
+          <li>Fortune reports fears of migration wave into Central Asia and Europe; European governments already attempting pre-emptive containment agreements.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — UN data, named institutions, field reports. Rhetoric: some urgency framing. Sourcing transparent. Engages counterarguments: partially.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-g">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-g)"></span>
+        <span class="source-name">Radio Free Europe / RFE/RL</span>
+        <span class="source-placement">center · Central Asia focus</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Central Asian governments — Kazakhstan, Uzbekistan, Turkmenistan — quietly alarmed about Iranian refugee flows. Authoritarian governments with little appetite for a humanitarian influx and minimal aid infrastructure.</li>
+          <li>Russia caught between not wanting a destabilized neighbor and not opposing the U.S. operation. Russian media covering displacement numbers with unusual restraint.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — geopolitically grounded; relies partly on government-adjacent sources. Rhetoric: minimal. Sourcing partial. Engages counterarguments: partially.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-b">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-b)"></span>
+        <span class="source-name">Stimson Center / Refugees International / USCRI</span>
+        <span class="source-placement">centrist policy</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Three issues to watch: (1) whether Iraqi Kurdistan becomes pressure-release valve or flashpoint; (2) whether Turkey's Erdoğan uses refugee flows as EU leverage (as in 2016); (3) whether UN emergency funding activates before displacement hardens into generational exile.</li>
+          <li>The U.S. has announced zero refugee admissions policy for Iranian civilians — notable given the scale and prior precedent (Iraqi/Afghan programs post-war).</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: yes.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-o">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-o)"></span>
+        <span class="source-name">Fox News / Trump administration</span>
+        <span class="source-placement">center-right to far-right</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Internal displacement framed as evidence that Iranians are fleeing the regime, not the strikes — regime change from below is the desired end-state.</li>
+          <li>No U.S. refugee admissions commitment announced. Immigration restrictionists privately oppose any Iran refugee program, citing security screening concerns.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — "fleeing the regime" asserted without evidence displaced persons distinguish cause. Rhetoric: regime-change wishful framing. Sourcing partial. Engages counterarguments: no.</div>
+      </div>
+    </div>
+
+    <div class="fringe-box">
+      <span class="fringe-label">⚡ Fringe / Early Signal</span>
+      Almost zero U.S. mainstream coverage of the 3.2M figure relative to its scale. Compare: 1M Ukrainian displaced in week 1 of the 2022 invasion generated wall-to-wall coverage. The disparity is being named explicitly in international and diaspora press as a racialized media-attention gap. Whether this becomes a domestic political story depends on whether Democratic politicians pick it up — so far they haven't.
+    </div>
+  </section>
+      <section id="topic-plus1" class="topic-section">
+    <div class="topic-header">
+      <div class="topic-badge badge-o">R1<div class="badge-sub">Rght–Ctr</div></div>
+      <div class="topic-meta">
+        <div class="topic-zone">Business · Venture Capital · Industrial Tech</div>
+        <div class="topic-title">Humanoid Robots Enter Mass Production: Figure AI at $48B, OpenAI Eyes $1T IPO, LeCun's JEPA Bet</div>
+        <div class="topic-desc">What serious money, center-right business press, and the venture/industrial complex are focused on — largely independent of the war cycle.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-b">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-b)"></span>
+        <span class="source-name">Crunchbase / Bloomberg / WSJ</span>
+        <span class="source-placement">center-right business</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Figure AI closed Series D at $48B valuation with Amazon committing to 20,000-unit warehouse deployment. Production at 1,200 units/month targeting 5,000/month by Q4 2026.</li>
+          <li>Nscale raised $2B (Series C, $14.6B valuation) — largest tech funding round in European history — backed by NVIDIA, Citadel, Dell, and Jane Street. Sheryl Sandberg and Nick Clegg joined the board.</li>
+          <li>Yann LeCun's AMI Labs raised $1.03B seed round (largest European seed round ever) to build world models on JEPA architecture. Backed by Bezos, NVIDIA, Samsung, Temasek.</li>
+          <li>Robotics funding: 2026 on pace for $20B+. Four firms raised $1.2B in a single week.</li>
+          <li>OpenAI laying groundwork for H2 2026 IPO at potential $1T valuation. xAI-SpaceX combined entity targeting June 2026 IPO at up to $1.5T.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — deal terms, named investors, production figures verifiable. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: partially.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-g">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-g)"></span>
+        <span class="source-name">Foundation Capital / VentureBeat</span>
+        <span class="source-placement">center-right tech</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Capital pattern of 2026: not "AI as software" but "AI as physical infrastructure" — compute clusters, humanoid bodies, energy supply. The constraint is no longer model capability; it's electrons and physical deployment.</li>
+          <li>Pentagon contracts for autonomous systems, ISR, and logistics AI are accelerating. Palantir, Anduril, and Scale AI are war-contract beneficiaries.</li>
+          <li>LeCun's JEPA bet is the most technically interesting signal — if world models prove superior to LLMs for embodied robotics, it would be the first genuine architectural inflection since the transformer paper.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — "physical infrastructure" thesis well-supported by funding data; JEPA-vs.-transformer claim technically substantive but contested. Rhetoric: none notable. Sourcing transparent. Engages counterarguments: partially.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-b">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-b)"></span>
+        <span class="source-name">Labor economists / AFL-CIO adjacent</span>
+        <span class="source-placement">center-left counterpoint</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>20,000 humanoid robots in Amazon warehouses means displacement of a proportional share of Amazon's 750,000 warehouse workers. No policy framework exists to manage this transition.</li>
+          <li>The $20B+ in robotics investment is occurring simultaneously with a labor market that added only 79,000 jobs last quarter. War-induced slowdown + robot-driven displacement is a political earthquake with no named owner in Washington.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — displacement math factually grounded; political conclusion projected but plausible. Rhetoric: mild alarm. Sourcing transparent. Engages counterarguments: no (doesn't address "robots create new jobs" counterargument).</div>
+      </div>
+    </div>
+
+    <div class="source-block src-o">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-o)"></span>
+        <span class="source-name">Thiel-adjacent tech nationalists</span>
+        <span class="source-placement">far-right</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>U.S. dominance in humanoid robotics and AI is the true "generational" story — more important than the Iran war. China has competing programs (Unitree, Agibot). Whoever wins the embodied AI race wins the industrial base of the next century.</li>
+          <li>OpenAI and xAI IPOs will be the largest capital mobilization events in history. Retail investors should not be left out — current IPO access structures favor institutional players.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — U.S.-China robotics competition real and evidenced; retail access argument is advocacy. Rhetoric: nationalistic framing ("whoever wins"). Sourcing partial. Engages counterarguments: no.</div>
+      </div>
+    </div>
+
+    <div class="fringe-box">
+      <span class="fringe-label">⚡ Fringe / Early Signal</span>
+      LeCun's AMI Labs JEPA raise is being watched in AI-safety circles as a potential paradigm shift. JEPA-based world models don't require the same RLHF alignment techniques as transformers — which means the entire current AI safety apparatus (Constitutional AI, RLHF, red-teaming) may be partially irrelevant if JEPA architecture dominates robotics. Very early. Structurally important.
+    </div>
+  </section>
+    </div>
+  </div>
+
+  <!-- ── Step label ── -->
+  <p class="tier-label layout-pair">Two steps out from center</p>
+
+  <!-- ── Tier 3: L2 + R2 side by side ── -->
+  <div class="layout-pair">
+    <div class="topic-pair">
+      <section id="topic-minus2" class="topic-section">
+    <div class="topic-header">
+      <div class="topic-badge badge-r">L2<div class="badge-sub">Far Left</div></div>
+      <div class="topic-meta">
+        <div class="topic-zone">Cultural · Anti-Imperialist Sphere</div>
+        <div class="topic-title">The Oscars as Wartime Ritual: Cultural Resistance, Spectacle &amp; the Limits of Hollywood Dissent</div>
+        <div class="topic-desc">What the far-left cultural-Marxist and anti-imperialist sphere is talking about this week — not the war itself, but what the ceremony's symbolic apparatus reveals about power and resistance.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-o">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-o)"></span>
+        <span class="source-name">Jacobin / Palestinian Chronicle / Al Jazeera Culture</span>
+        <span class="source-placement">far-left · anti-imperialist</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Bardem's "No a la Guerra" pin — the same pin worn in 2003 — proves U.S. empire operates on a 23-year cycle of identical wars with identical cultural co-optation. The Oscars stage is not resistance; it's managed release.</li>
+          <li>A documentary winner's speech about governments murdering people and oligarchs capturing media was the evening's most structurally subversive moment — and the most ignored.</li>
+          <li>The cultural apparatus normalized war in three weeks. Hollywood Reporter's "What If We Went to War and the Oscars Didn't Care?" is itself the symptom.</li>
+          <li>Priyanka Chopra's viral discomfort read as the face of comprador liberal integration — non-Western celebrity class that benefits from empire while performing neutrality.</li>
+          <li>Politics "relegated to the background" — scattered speeches, pins, mostly entertainment framing. Far-left reading: this is the design, not the failure.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning medium. Rhetoric: conspiratorial managed-dissent framing; us/them (artists-who-speak vs. sellouts). Sourcing partial. Engages counterarguments: no.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-r">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-r)"></span>
+        <span class="source-name">NewsBusters / OutKick / GB News</span>
+        <span class="source-placement">far-right counterpoint</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>"The Oscars are back to being a woke disaster." Bardem "hijacked the broadcast for a Free Palestine lecture" — a Spanish national lecturing Americans about their president's war.</li>
+          <li>Hollywood dissent is too loud, too unchallenged, too global. Priyanka Chopra's discomfort is the sensible reaction.</li>
+          <li>"Hollywood elites lecturing the peasants about geopolitics" — the show's politics are framed as alienating "real Americans" who support the war.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — "woke disaster" is pure assertion; no engagement with substance of Bardem's claims. Rhetoric: strong populist us/them, loaded language ("hijacked"). Sourcing partial. Engages counterarguments: no.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-b">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-b)"></span>
+        <span class="source-name">Hollywood Reporter / PBS NewsHour / Deadline</span>
+        <span class="source-placement">center</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>The ceremony was largely entertainment-forward — Conan O'Brien ran a "breezy, gag-filled" show. Political moments were real but interstitial, not dominant.</li>
+          <li>Oscars 2026 ends a "politically charged awards season" — earlier shows had more direct protest. By Oscars night, three weeks in, the war was partly normalized in the awards-show format.</li>
+          <li>Antiwar statements came from presenters, not winners' speeches, minimizing their prominence structurally. The Academy responded to the Teyana Taylor security incident faster than to any war statement.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: yes.</div>
+      </div>
+    </div>
+
+    <div class="fringe-box">
+      <span class="fringe-label">⚡ Fringe / Early Signal</span>
+      A growing contingent in cultural criticism argues that the pin-and-speech format of celebrity dissent has been fully absorbed as entertainment content — generating clicks while producing zero policy friction. The "managed release" thesis is gaining traction in left-cultural journals. Empirical test: whether any follow-on action emerges by the weekend, or the moment dissolves into content cycles.
+    </div>
+  </section>
+      <section id="topic-plus2" class="topic-section">
+    <div class="topic-header">
+      <div class="topic-badge badge-y">R2<div class="badge-sub">Far Right</div></div>
+      <div class="topic-meta">
+        <div class="topic-zone">Hard Money · Libertarian Finance · Geopolitical Heterodox</div>
+        <div class="topic-title">The Petrodollar's Structural Unraveling: Saudi Yuan Oil Sales, Gold at $5,000+, Monetary Architecture of Empire Under Stress</div>
+        <div class="topic-desc">The story the libertarian/Austrian-economics/hard-money and geopolitically heterodox right treats as the most important development of the war — largely ignored in mainstream coverage.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-g">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-g)"></span>
+        <span class="source-name">Middle East Monitor / House of Saud analysis / Friday Times</span>
+        <span class="source-placement">heterodox · international economic press</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Saudi Arabia announced it will accept yuan, euros, yen, and digital currencies for oil transactions — the most significant rupture in the petrodollar system since its 1974 establishment. Formal policy shift, not speculation.</li>
+          <li>Iran reportedly conditioning limited Strait of Hormuz passage on cargo being priced in yuan, not dollars. (Single-sourced: unnamed U.S. official to CNN. Treat as unverified.)</li>
+          <li>BRICS bloc (now including Saudi Arabia and Iran) provides institutional architecture for non-dollar oil settlement. The war has accelerated a decade-long trend into a months-long structural rupture.</li>
+          <li>The U.S. is spending $1–2B/day in dollar-denominated debt — simultaneously defending and accelerating the erosion of the order it purports to protect.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong on Saudi policy shift; Hormuz-yuan conditionality single-sourced and unverified. Rhetoric: some "empire collapse" framing. Sourcing mixed. Engages counterarguments: partially.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-g">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-g)"></span>
+        <span class="source-name">GoldSilver.com / CNBC Markets / TradingKey</span>
+        <span class="source-placement">hard-money · libertarian finance</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Gold touched $5,400/oz; now in $5,000–5,200 range. Counter-intuitive: oil surge stoking inflation fears, reducing rate-cut expectations, strengthening the dollar — which suppresses gold in the short term even as long-term structural demand accelerates.</li>
+          <li>J.P. Morgan targets $6,300/oz by year-end 2026. Deutsche Bank: $6,000. Short-term dollar strength vs. long-term gold bull case is the core trade tension.</li>
+          <li>Central banks in China, Turkey, and Gulf states accelerating gold purchases — institutional de-dollarization through reserve accumulation, not headline policy announcements.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — price data, institutional forecasts, reserve data sourced. Rhetoric: mild doom framing. Sourcing transparent. Engages counterarguments: partially (acknowledges dollar strength as short-term gold headwind).</div>
+      </div>
+    </div>
+
+    <div class="source-block src-y">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-y)"></span>
+        <span class="source-name">Tax Research UK / BlockNow / Watcher Guru</span>
+        <span class="source-placement">heterodox left-international · crypto-libertarian</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>"Is this war all about the dollar?" — a heterodox thesis gaining traction across ideological lines: the Iran war is primarily about defending the petrodollar recycling system that finances U.S. deficit spending.</li>
+          <li>Iran's integration into BRICS yuan-denominated settlement would structurally remove significant dollar oil demand — threatening the mechanism by which the U.S. exports inflation and finances its debt.</li>
+          <li>Bitcoin has outperformed both gold and the S&amp;P 500 since Feb. 28. Crypto community reads this as vindicating the sovereign-money thesis.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — petrodollar-as-war-motive thesis economically coherent but unfalsifiable from public evidence. Rhetoric: conspiratorial "the real reason" framing. Sourcing mixed. Engages counterarguments: no.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-b">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-b)"></span>
+        <span class="source-name">Council on Foreign Relations / dollar-system defenders</span>
+        <span class="source-placement">center counterpoint</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>The petrodollar is not dying; it is diversifying. The dollar remains 58% of global central bank reserves (down from 71% in 2000 but not in free-fall).</li>
+          <li>Saudi Arabia accepting yuan for some sales is a pricing convenience, not a strategic rupture. The U.S. survived larger debt-to-GDP ratios (WWII: 119%) without a dollar collapse.</li>
+          <li>Gold at $5,000 reflects risk-off demand, not imminent dollar collapse. Every decade since 1970 has seen "petrodollar is dying" theses — none have produced the predicted collapse.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — historical data, reserve share figures grounded. Rhetoric: mild dismissiveness of structural-change arguments. Sourcing transparent. Engages counterarguments: yes.</div>
+      </div>
+    </div>
+
+    <div class="fringe-box">
+      <span class="fringe-label">⚡ Fringe / Early Signal — FLAG: UNVERIFIED</span>
+      The "Hormuz as monetary weapon" thesis — Iran using the Strait closure to accelerate de-dollarization rather than purely as a military/political tactic — is discussed in heterodox financial circles and some Gulf policy analysis. If the yuan-conditioned passage story confirms (currently single-sourced to one unnamed U.S. official), it would be one of the most significant monetary-geopolitical developments in decades. Early. Unverified. Structurally coherent. Track closely.
+    </div>
+  </section>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════ -->
+<footer>
+  <em>Sources:</em>
+  <a href="https://www.thenationalnews.com/arts-culture/film-tv/2026/03/16/oscars-2026-stars-display-iran-war-and-gaza-messages-on-red-carpet/">The National — Oscars</a> ·
+  <a href="https://www.pbs.org/newshour/arts/a-politically-charged-awards-season-ends-with-calls-for-peace-at-the-oscars">PBS NewsHour</a> ·
+  <a href="https://www.unhcr.org/news/press-releases/unhcr-3-2-million-iranians-temporarily-displaced-iran-conflict-intensifies">UNHCR — 3.2M displaced</a> ·
+  <a href="https://www.aljazeera.com/news/2026/3/17/irans-neighbours-prepare-for-fallout-as-war-threatens-new-refugee-crisis">Al Jazeera — refugee crisis</a> ·
+  <a href="https://refugees.org/war-in-a-fragile-region-three-issues-to-watch-in-the-middle-east/">USCRI</a> ·
+  <a href="https://fortune.com/2026/03/14/iranian-refugees-displaced-us-israel-war-migration-crisis-europe-turkey/">Fortune — migration crisis</a> ·
+  <a href="https://news.crunchbase.com/venture/2026-tech-startup-trends-ipo-ai-ma/">Crunchbase</a> ·
+  <a href="https://foundationcapital.com/ideas/where-ai-is-headed-in-2026">Foundation Capital</a> ·
+  <a href="https://www.middleeastmonitor.com/20260314-war-oil-and-power-could-the-iran-conflict-shake-the-petrodollar-order/">Middle East Monitor</a> ·
+  <a href="https://goldsilver.com/industry-news/goldsilver-news/gold-price-forecast-2026-fed-iran-and-the-6000-question/">GoldSilver — gold forecast</a> ·
+  <a href="https://watcher.guru/news/brics-unit-could-replace-dollar-as-us-burns-2b-a-day-on-iran-war">Watcher Guru — BRICS</a> ·
+  <a href="https://www.globalsecurity.org/wmd/library/news/iran/2026/03/iran-260315-rferl01.htm">RFE/RL — Central Asia</a>
+  <br><br>
+  <em>Per-author perspectives. No synthesis. Apply your own judgment.</em>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════
+     SCROLL BEHAVIOR
+     Shows mini-TOC when full TOC has scrolled out of view.
+     Research basis: newspaper "running header" model —
+     spectrum context persists but never dominates reading.
+     ═══════════════════════════════════════════════════ -->
+<script>
+(function () {
+  const fullToc  = document.getElementById('full-toc');
+  const miniToc  = document.getElementById('mini-toc');
+
+  function onScroll () {
+    const tocBottom = fullToc.getBoundingClientRect().bottom;
+    // Show mini-TOC once the full TOC has scrolled above the viewport
+    if (tocBottom < 0) {
+      miniToc.classList.add('visible');
+      // Nudge scroll-margin on sections to account for mini-toc height
+      document.body.style.setProperty('--mini-toc-h', '34px');
+    } else {
+      miniToc.classList.remove('visible');
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // run once on load
+})();
+</script>
+
+</body>
+</html>
