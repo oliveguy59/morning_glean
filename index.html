@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Morning Glean — March 19, 2026</title>
+<title>Morning Glean — March 20, 2026</title>
 <style>
 
 /* ════════════════════════════════════════════════════
@@ -98,7 +98,6 @@ body {
   line-height:   var(--line-height-base);
   color:         var(--text-primary);
   background:    var(--bg);
-  /* Push content below: fixed rainbow-bar + fixed mini-toc when active */
   padding-top:   calc(var(--rainbow-h));
   padding-bottom: 80px;
 }
@@ -106,8 +105,7 @@ body {
 a { color: inherit; }
 
 /* ════════════════════════════════════════════════════
-   FIXED RAINBOW BAR — always at very top of viewport
-   The "you are reading a spectrum" constant signal.
+   FIXED RAINBOW BAR
    ════════════════════════════════════════════════════ */
 #rainbow-bar {
   position: fixed;
@@ -150,8 +148,7 @@ a { color: inherit; }
 }
 
 /* ════════════════════════════════════════════════════
-   FULL TOC — visible at page top, not sticky itself.
-   The mini-TOC takes over on scroll.
+   FULL TOC
    ════════════════════════════════════════════════════ */
 #full-toc {
   background: var(--chrome-mid);
@@ -214,7 +211,6 @@ a { color: inherit; }
   margin-top: 2px;
 }
 
-/* TOC card coloring: worst-actor color as left-border + tinted bg */
 .toc-r { border-left: 3px solid var(--clr-r); background: rgba(229,48,48,0.18); }
 .toc-o { border-left: 3px solid var(--clr-o); background: rgba(232,121,10,0.16); }
 .toc-y { border-left: 3px solid var(--clr-y); background: rgba(201,168,0,0.16); }
@@ -223,13 +219,11 @@ a { color: inherit; }
 .toc-i { border-left: 3px solid var(--clr-i); background: rgba(59,42,142,0.18); }
 
 /* ════════════════════════════════════════════════════
-   MINI-TOC — fixed, appears when full TOC scrolls away.
-   Newspaper inner-page "running header" analog.
-   Hidden by default; JS adds .visible class.
+   MINI-TOC
    ════════════════════════════════════════════════════ */
 #mini-toc {
   position: fixed;
-  top: var(--rainbow-h);   /* sits right below the rainbow bar */
+  top: var(--rainbow-h);
   left: 0;
   right: 0;
   height: var(--mini-toc-h);
@@ -317,13 +311,11 @@ a { color: inherit; }
   padding: var(--content-pad-v) var(--content-pad-h);
 }
 
-/* Scroll-margin accounts for fixed rainbow + mini-toc height */
 .topic-section {
   margin-bottom: 56px;
   scroll-margin-top: calc(var(--rainbow-h) + var(--mini-toc-h) + 18px);
 }
 
-/* ── Topic header ── */
 .topic-header {
   display: flex;
   align-items: flex-start;
@@ -385,7 +377,6 @@ a { color: inherit; }
   font-style: italic;
 }
 
-/* ── Source block ── */
 .source-block {
   background: var(--card-bg);
   border-radius: var(--radius);
@@ -393,7 +384,6 @@ a { color: inherit; }
   border: 1px solid var(--border-light);
   overflow: hidden;
   box-shadow: var(--card-shadow);
-  /* Left border set per-class below */
   border-left-width: var(--src-border-w);
   border-left-style: solid;
 }
@@ -467,7 +457,6 @@ a { color: inherit; }
 }
 .filter-line strong { color: #555; }
 
-/* ── Fringe signal box ── */
 .fringe-box {
   background: var(--fringe-bg);
   border: 1px dashed var(--fringe-border);
@@ -488,7 +477,6 @@ a { color: inherit; }
   margin-bottom: 5px;
 }
 
-/* ── Footer ── */
 footer {
   text-align: center;
   font-size: 0.70rem;
@@ -501,9 +489,6 @@ footer {
 footer a { text-decoration: underline; color: var(--text-muted); }
 footer a:hover { color: var(--text-primary); }
 
-/* ════════════════════════════════════════════════════
-   RESPONSIVE
-   ════════════════════════════════════════════════════ */
 @media (max-width: 620px) {
   .masthead { padding: 18px 16px 14px; flex-direction: column; align-items: flex-start; }
   .masthead-sub { text-align: left; margin-top: 6px; }
@@ -516,28 +501,21 @@ footer a:hover { color: var(--text-primary); }
   .mini-pip { flex-direction: column; gap: 2px; font-size: 0.55rem; }
 }
 
-
 /* ════════════════════════════════════════════════════
-   READING LAYOUT — three tiers:
-   1. C alone   — narrow centered column
-   2. L1 + R1   — side-by-side pair (one step out)
-   3. L2 + R2   — side-by-side pair (two steps out)
+   READING LAYOUT — three tiers
    ════════════════════════════════════════════════════ */
-
-/* ── Tier containers ── */
 .layout-center {
-  max-width: var(--content-max);   /* ~820px — focused, single col */
+  max-width: var(--content-max);
   margin: 0 auto;
   padding: var(--content-pad-v) var(--content-pad-h) 0;
 }
 
 .layout-pair {
-  max-width: 1180px;               /* wide enough for two columns */
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 var(--content-pad-h);
 }
 
-/* ── Step labels between tiers ── */
 .tier-label {
   text-align: center;
   font-size: 0.60rem;
@@ -558,7 +536,6 @@ footer a:hover { color: var(--text-primary); }
   background: var(--border-light);
 }
 
-/* ── Two-column grid for L/R pairs ── */
 .topic-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -566,7 +543,6 @@ footer a:hover { color: var(--text-primary); }
   padding-bottom: 48px;
 }
 
-/* Subtle vertical rule between columns */
 .topic-pair > .topic-section:first-child {
   border-right: 1px solid var(--border-light);
   padding-right: 28px;
@@ -575,7 +551,6 @@ footer a:hover { color: var(--text-primary); }
   padding-left: 0;
 }
 
-/* Tighten topic-title font in columns (less horizontal room) */
 .topic-pair .topic-title {
   font-size: 1.0rem;
 }
@@ -585,7 +560,6 @@ footer a:hover { color: var(--text-primary); }
   font-size: 0.9rem;
 }
 
-/* ── Responsive: stack columns on small screens ── */
 @media (max-width: 860px) {
   .topic-pair {
     grid-template-columns: 1fr;
@@ -607,61 +581,43 @@ footer a:hover { color: var(--text-primary); }
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════
-     FIXED RAINBOW BAR
-     Always at top. The minimum persistent spectrum signal.
-     Research basis: like the newspaper masthead — never
-     disappears, never dominates. 5px of constant context.
-     ═══════════════════════════════════════════════════ -->
 <div id="rainbow-bar" aria-hidden="true"></div>
 
-<!-- ═══════════════════════════════════════════════════
-     MINI-TOC (fixed, appears when full TOC scrolls away)
-     "Running header" analog — newspaper inner-page model.
-     Keeps spectrum context visible without dominating.
-     JS adds/removes .visible class.
-     ═══════════════════════════════════════════════════ -->
 <nav id="mini-toc" aria-label="Spectrum navigation">
   <a href="#topic-minus2" class="mini-pip">
     <span class="mini-dot" style="background:var(--clr-r)"></span>
-    <span class="mini-label">L2 · Oscars</span>
+    <span class="mini-label">L2 · Minab</span>
   </a>
   <a href="#topic-minus1" class="mini-pip">
-    <span class="mini-dot" style="background:var(--clr-o)"></span>
-    <span class="mini-label">L1 · Displaced</span>
+    <span class="mini-dot" style="background:var(--clr-r)"></span>
+    <span class="mini-label">L1 · Off-Ramp</span>
   </a>
   <a href="#topic-zero" class="mini-pip">
-    <span class="mini-dot" style="background:var(--clr-o)"></span>
-    <span class="mini-label">C · Economy</span>
+    <span class="mini-dot" style="background:var(--clr-b)"></span>
+    <span class="mini-label">C · South Pars</span>
   </a>
   <a href="#topic-plus1" class="mini-pip">
     <span class="mini-dot" style="background:var(--clr-o)"></span>
-    <span class="mini-label">R1 · Robots</span>
+    <span class="mini-label">R1 · $200B Ask</span>
   </a>
   <a href="#topic-plus2" class="mini-pip">
-    <span class="mini-dot" style="background:var(--clr-y)"></span>
-    <span class="mini-label">R2 · Petrodollar</span>
+    <span class="mini-dot" style="background:var(--clr-r)"></span>
+    <span class="mini-label">R2 · MAGA Cracks</span>
   </a>
 </nav>
 
-<!-- ═══════════════════════════════════════════════════
-     MASTHEAD
-     ═══════════════════════════════════════════════════ -->
 <header class="masthead">
   <div>
     <div class="masthead-title">☀ Morning Glean</div>
-    <div class="masthead-date">Thursday, March 19, 2026</div>
+    <div class="masthead-date">Friday, March 20, 2026</div>
   </div>
   <div class="masthead-sub">
     Per-author perspectives across the spectrum.<br>
     No synthesis. Apply your own judgment.<br>
-    15-hour scan · American Empire scope
+    Day 21 · American Empire scope
   </div>
 </header>
 
-<!-- ═══════════════════════════════════════════════════
-     FULL TOC — not sticky; mini-TOC takes over on scroll.
-     ═══════════════════════════════════════════════════ -->
 <nav id="full-toc" aria-label="Topic spectrum (full)">
   <div class="spectrum-labels">
     <span>◀ L2 · Far Left</span>
@@ -674,40 +630,37 @@ footer a:hover { color: var(--text-primary); }
 
     <a href="#topic-minus2" class="toc-card toc-r">
       <span class="toc-position">L2 · Far Left</span>
-      <span class="toc-label">Oscars as Wartime Ritual</span>
-      <span class="toc-slug">Cultural dissent &amp; the limits of Hollywood resistance</span>
+      <span class="toc-label">The Minab School Massacre</span>
+      <span class="toc-slug">168 dead, 100+ children · IHL accountability · DoD silence</span>
     </a>
 
-    <a href="#topic-minus1" class="toc-card toc-o">
+    <a href="#topic-minus1" class="toc-card toc-r">
       <span class="toc-position">L1 · Left–Center</span>
-      <span class="toc-label">3.2M Displaced Iranians</span>
-      <span class="toc-slug">Refugee crisis missing from U.S. front pages</span>
+      <span class="toc-label">No Off-Ramp</span>
+      <span class="toc-slug">Iran rejects ceasefire · back-channel gone · mediators struck</span>
     </a>
 
-    <a href="#topic-zero" class="toc-card toc-o">
+    <a href="#topic-zero" class="toc-card toc-b">
       <span class="toc-position">C · Center</span>
-      <span class="toc-label">The Kitchen Table War</span>
-      <span class="toc-slug">0.7% GDP · Confidence drops · Gas at $4.50</span>
+      <span class="toc-label">South Pars &amp; $115 Oil</span>
+      <span class="toc-slug">Energy infrastructure war · Gulf states burning · Ras Laffan 5yrs</span>
     </a>
 
     <a href="#topic-plus1" class="toc-card toc-o">
       <span class="toc-position">R1 · Right–Center</span>
-      <span class="toc-label">Humanoid Robots Go Mass-Market</span>
-      <span class="toc-slug">Figure AI $48B · OpenAI $1T IPO · LeCun's JEPA</span>
+      <span class="toc-label">The $200 Billion Ask</span>
+      <span class="toc-slug">Pentagon supplemental · GOP cracks · no AUMF · no timeline</span>
     </a>
 
-    <a href="#topic-plus2" class="toc-card toc-y">
+    <a href="#topic-plus2" class="toc-card toc-r">
       <span class="toc-position">R2 · Far Right</span>
-      <span class="toc-label">Petrodollar Unraveling</span>
-      <span class="toc-slug">Saudi yuan oil · Gold $5K · Hormuz as monetary weapon</span>
+      <span class="toc-label">MAGA's Antiwar Wing Goes Loud</span>
+      <span class="toc-slug">Tucker · Tulsi's silence · Joe Kent resigns · declare victory</span>
     </a>
 
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════════════════
-     LEGEND
-     ═══════════════════════════════════════════════════ -->
 <div class="legend" role="complementary" aria-label="Color key">
   <span class="legend-title">Filter →</span>
   <span class="legend-item"><span class="legend-dot" style="background:var(--clr-r)"></span> Red — propaganda</span>
@@ -720,87 +673,65 @@ footer a:hover { color: var(--text-primary); }
   <span class="legend-note">TOC card color = worst actor in that topic · left border = each source's rating</span>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     CONTENT
-     Reading order: C alone → L1/R1 pair → L2/R2 pair
-     Visual logic: start at the center of gravity,
-     then expand outward one step, then two steps.
-     ═══════════════════════════════════════════════════ -->
 <main>
 
   <!-- ── Tier 1: Center alone ── -->
   <div class="layout-center">
     <section id="topic-zero" class="topic-section">
     <div class="topic-header">
-      <div class="topic-badge badge-o">C<div class="badge-sub">Center</div></div>
+      <div class="topic-badge badge-b">C<div class="badge-sub">Center</div></div>
       <div class="topic-meta">
-        <div class="topic-zone">Domestic Economy · Kitchen Table</div>
-        <div class="topic-title">The Kitchen Table War: 0.7% GDP, Consumer Confidence Hits Lows, Gas Above $4.50</div>
-        <div class="topic-desc">The most average story of the morning — the domestic economic consequence of a war most Americans nominally support but are beginning to feel in their wallets.</div>
-      </div>
-    </div>
-
-    <div class="source-block src-i">
-      <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-i)"></span>
-        <span class="source-name">CNN Business / FRED / BLS / Conference Board</span>
-        <span class="source-placement">center</span>
-      </div>
-      <div class="source-body">
-        <ul class="args">
-          <li>U.S. GDP grew at an annualized 0.7% in Q4 2025, down from 4.4% in Q3 — sharpest one-quarter deceleration since 2022. War began after collection; Q1 2026 will be the first data to capture it.</li>
-          <li>Consumer Confidence dropped to 55.5 in March (Conference Board), lowest in three months. Most cited cause: gas prices above $4.50/gallon nationally as Brent crude holds above $110.</li>
-          <li>Hiring added only 79,000 jobs in Q4 2025. Pre-war momentum was already weakening.</li>
-        </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — government statistical data, named institutions. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: yes (notes spending holding even as confidence falls — split signal).</div>
+        <div class="topic-zone">Energy · War Escalation · Global Markets</div>
+        <div class="topic-title">South Pars, $115 Oil, and the Energy Infrastructure War Nobody Planned For</div>
+        <div class="topic-desc">The center story of March 20 — the story that's on every front page, crosses every ideological line, and has immediate consequences for everyone who drives a car, pays gas bills, or holds equities.</div>
       </div>
     </div>
 
     <div class="source-block src-b">
       <div class="source-header">
         <span class="source-dot" style="background:var(--clr-b)"></span>
-        <span class="source-name">KPMG / Conference Board economic analysis</span>
-        <span class="source-placement">center-right business</span>
+        <span class="source-name">CBS News / CNN / PBS NewsHour</span>
+        <span class="source-placement">center</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>"Two faces of the economy": services and government spending provide a floor, but goods-producing industries and consumer retail are softening rapidly. Mild recession in 2026 is now the modal forecast.</li>
-          <li>The war's oil shock acts like a tax on every American household — each $10/barrel increase costs ~$200/year. At current prices: $400–600 per household annually.</li>
-          <li>The Fed is in a bind: inflation is supply-shock (oil), not demand-driven — raising rates would crush an already slowing economy without addressing the energy-price cause.</li>
+          <li>Israel struck Iranian facilities linked to the South Pars gas field on March 18 — the world's largest natural gas reserves, shared with Qatar (North Dome). First strike on Iranian production infrastructure in three weeks of war, a deliberate escalation.</li>
+          <li>Iran retaliated by targeting: Saudi Arabia's SAMREF refinery and Jubail petrochemical complex, UAE's Al Hosn gasfield, and Qatar's Ras Laffan refinery and Mesaieed petrochemical complex. Qatar says Ras Laffan damage could take five years to repair.</li>
+          <li>Brent crude: $115/barrel. Energy markets pricing in a structural disruption, not a temporary spike.</li>
+          <li>Trump on Truth Social: Israel would "not attack the gas field again," and warned the U.S. would "blow up" South Pars if Iran continued striking Qatar's LNG facilities. Public ultimatum to both sides, issued via social media.</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong. Rhetoric: mild concern framing. Sourcing transparent. Engages counterarguments: yes.</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — reported events, named targets, verifiable prices. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: yes (notes Iran's retaliatory logic).</div>
       </div>
     </div>
 
-    <div class="source-block src-y">
+    <div class="source-block src-b">
       <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-y)"></span>
-        <span class="source-name">Democratic politicians / Progressive economists</span>
-        <span class="source-placement">center-left</span>
+        <span class="source-dot" style="background:var(--clr-b)"></span>
+        <span class="source-name">CNBC / Bloomberg Energy / NPR</span>
+        <span class="source-placement">center</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>$860B war launched without a supplemental appropriations bill — deficit-financed at $1–2B/day on top of debt already at 125% of GDP. Future generations handed a compounding bill.</li>
-          <li>"Trickle-up wartime economics": defense contractor stocks at record highs; median household purchasing power falling in real terms. War redistributing wealth upward under cover of patriotism.</li>
-          <li>Congress has not passed a war authorization or supplemental budget — executive branch spending at will with no legislative check.</li>
+          <li>The oil market dynamic is now a full supply shock, not just a risk premium: actual infrastructure destruction in the Gulf. This is the scenario energy economists modeled but assumed deterrence would prevent.</li>
+          <li>The coordinated strategic petroleum reserve release (IEA + U.S.) has provided limited relief — SPR volumes cannot replace Ras Laffan LNG production or South Pars output.</li>
+          <li>Europe's gas supply is acutely exposed: Qatar's Ras Laffan is a primary LNG export hub supplying European winter reserves. A five-year repair timeline would require Europe to find permanent alternative LNG supply at elevated prices, with limited spot market capacity.</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — deficit financing and purchasing power claims factually grounded; "trickle-up" is advocacy language. Rhetoric: class framing, moral appeal. Sourcing partially transparent. Engages counterarguments: partially.</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — supply-chain analysis, SPR capacity data, European LNG import data well-established. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: partially.</div>
       </div>
     </div>
 
-    <div class="source-block src-o">
+    <div class="source-block src-b">
       <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-o)"></span>
-        <span class="source-name">Trump administration / supply-side economists</span>
-        <span class="source-placement">far-right</span>
+        <span class="source-dot" style="background:var(--clr-b)"></span>
+        <span class="source-name">Al Jazeera / Gulf state press</span>
+        <span class="source-placement">center-left · international</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>Economy in a "temporary adjustment phase" caused by a necessary war. Post-war reconstruction, weakened Iran lifting a terror premium, and energy normalization will drive a boom in H2 2026.</li>
-          <li>Gas prices are a short-term cost of long-term security. Americans paid more in Korea, Vietnam, and Iraq — this war is measured in weeks, not years.</li>
-          <li>The 0.7% GDP figure is pre-war data. Victory will produce a "peace dividend" in the form of lower long-term geopolitical risk premia.</li>
+          <li>Qatar and the UAE — U.S. allies, home to major U.S. military bases — have now been attacked by Iran, despite both countries having attempted to stay out of the war. The strike on Ras Laffan is a direct cost being imposed on U.S. partners who did not choose the conflict.</li>
+          <li>The Gulf states are privately furious: the war they were not consulted about is now destroying their infrastructure. The untold story of U.S. alliance management — "partners" paying the price for a unilaterally launched war.</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — post-war boom thesis entirely speculative; "victory" undefined. Rhetoric: false-equivalence with longer wars, future-casting without evidence. Sourcing partial. Engages counterarguments: no.</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — factual, reported. Rhetoric: mild sympathy for Gulf states framing. Sourcing transparent. Engages counterarguments: partially.</div>
       </div>
     </div>
   </section>
@@ -814,159 +745,129 @@ footer a:hover { color: var(--text-primary); }
     <div class="topic-pair">
       <section id="topic-minus1" class="topic-section">
     <div class="topic-header">
-      <div class="topic-badge badge-o">L1<div class="badge-sub">Left–Ctr</div></div>
+      <div class="topic-badge badge-r">L1<div class="badge-sub">Left–Ctr</div></div>
       <div class="topic-meta">
-        <div class="topic-zone">Humanitarian · International Aid &amp; Diaspora Press</div>
-        <div class="topic-title">3.2 Million Displaced: Iran's Internal Refugee Crisis &amp; the Regional Containment Failure</div>
-        <div class="topic-desc">The humanitarian story tracked by center-left outlets and international aid organizations — largely absent from U.S. mainstream front pages.</div>
-      </div>
-    </div>
-
-    <div class="source-block src-i">
-      <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-i)"></span>
-        <span class="source-name">UNHCR / Al Jazeera / Baker Institute</span>
-        <span class="source-placement">center-left · international</span>
-      </div>
-      <div class="source-body">
-        <ul class="args">
-          <li>UNHCR confirmed 3.2 million Iranians internally displaced since Feb. 28 — the largest single-country displacement event since peak Syria. Primarily fleeing Tehran northward.</li>
-          <li>Iraqi Kurdistan reopened crossing but only for ethnic Kurds with family ties — the vast majority of displaced Iranians have no viable external route.</li>
-          <li>236 health care sites and 498 schools struck (Just Security). Healthcare in western Iran near-collapse.</li>
-          <li>Iran's neighbors — Turkey, Iraq, Pakistan, Afghanistan — are themselves fragile states with existing refugee burdens. No Turkey-2016-style buffer capacity in this geography.</li>
-          <li>Fortune reports fears of migration wave into Central Asia and Europe; European governments already attempting pre-emptive containment agreements.</li>
-        </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — UN data, named institutions, field reports. Rhetoric: some urgency framing. Sourcing transparent. Engages counterarguments: partially.</div>
-      </div>
-    </div>
-
-    <div class="source-block src-g">
-      <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-g)"></span>
-        <span class="source-name">Radio Free Europe / RFE/RL</span>
-        <span class="source-placement">center · Central Asia focus</span>
-      </div>
-      <div class="source-body">
-        <ul class="args">
-          <li>Central Asian governments — Kazakhstan, Uzbekistan, Turkmenistan — quietly alarmed about Iranian refugee flows. Authoritarian governments with little appetite for a humanitarian influx and minimal aid infrastructure.</li>
-          <li>Russia caught between not wanting a destabilized neighbor and not opposing the U.S. operation. Russian media covering displacement numbers with unusual restraint.</li>
-        </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — geopolitically grounded; relies partly on government-adjacent sources. Rhetoric: minimal. Sourcing partial. Engages counterarguments: partially.</div>
+        <div class="topic-zone">Diplomacy · Foreign Policy · International Affairs</div>
+        <div class="topic-title">No Off-Ramp: Iran Rejects Ceasefire, Qatar Gets Struck, and the Diplomacy Pipeline Cracks</div>
+        <div class="topic-desc">The story being tracked by center-left internationalists, foreign policy institutions, and the Gulf diplomatic community — framed in mainstream U.S. outlets as "Iran's intransigence," though the structural causes are more complex.</div>
       </div>
     </div>
 
     <div class="source-block src-b">
       <div class="source-header">
         <span class="source-dot" style="background:var(--clr-b)"></span>
-        <span class="source-name">Stimson Center / Refugees International / USCRI</span>
-        <span class="source-placement">centrist policy</span>
+        <span class="source-name">Al Jazeera / International Crisis Group / Axios</span>
+        <span class="source-placement">center-left · international affairs</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>Three issues to watch: (1) whether Iraqi Kurdistan becomes pressure-release valve or flashpoint; (2) whether Turkey's Erdoğan uses refugee flows as EU leverage (as in 2016); (3) whether UN emergency funding activates before displacement hardens into generational exile.</li>
-          <li>The U.S. has announced zero refugee admissions policy for Iranian civilians — notable given the scale and prior precedent (Iraqi/Afghan programs post-war).</li>
+          <li>Iran's FM Araghchi: "We don't ask for ceasefire, but this war must end — in a way that our enemies never again think about repeating such attacks." Iran signals openness to a permanent end, not a pause the U.S. and Israel could use to regroup.</li>
+          <li>The Witkoff–Araghchi back-channel — reactivated per Axios in mid-March — has been publicly denied by Araghchi, who says his last contact with Witkoff was before the war began. Diplomatic communication is thus occurring in the dark, if at all.</li>
+          <li>ICG identifies three structural obstacles to an off-ramp: (1) Iran wants written, verifiable guarantees — the U.S. won't sign anything resembling a treaty without Senate ratification; (2) Israel's war aims (regime change vs. denuclearization) are publicly divergent from Washington's stated aims; (3) Oman and Qatar — the traditional conduits — have both now been struck by Iranian missiles, degrading their mediator credibility.</li>
+          <li>The February 27 Oman "breakthrough" (Iran reportedly agreed to end enrichment, full IAEA verification) makes the war's launch even more diplomatically damaging: the U.S. struck 24 hours after an agreement was announced.</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: yes.</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — institutional sourcing, specific named officials, documented timeline. Rhetoric: mild sympathy for structural explanation. Sourcing transparent. Engages counterarguments: yes (acknowledges Iran's refusal of a temporary pause is also a strategic choice).</div>
       </div>
     </div>
 
-    <div class="source-block src-o">
+    <div class="source-block src-b">
       <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-o)"></span>
-        <span class="source-name">Fox News / Trump administration</span>
+        <span class="source-dot" style="background:var(--clr-b)"></span>
+        <span class="source-name">TIME / NPR / Iran International</span>
+        <span class="source-placement">center</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Iran "never sought a ceasefire" — the FM's framing — is being covered at face value by mainstream outlets without noting that Iran's position has been consistent: permanent end with guarantees, not pause.</li>
+          <li>The gap between U.S. stated war aims (denuclearization) and the operational reality (bombing campaign that has destroyed civilian infrastructure and ignited a regional energy conflict) is visible and widening.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: partially.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-r">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-r)"></span>
+        <span class="source-name">Trump administration / Hegseth / Graham</span>
         <span class="source-placement">center-right to far-right</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>Internal displacement framed as evidence that Iranians are fleeing the regime, not the strikes — regime change from below is the desired end-state.</li>
-          <li>No U.S. refugee admissions commitment announced. Immigration restrictionists privately oppose any Iran refugee program, citing security screening concerns.</li>
+          <li>No ceasefire will be considered until Iran's nuclear program is "verifiably, permanently dismantled." The FM's statement that Iran "never asked for a ceasefire" is read as proof of Iranian aggression.</li>
+          <li>Hegseth, on the $200B supplemental: "Takes money to kill bad guys." No timeline for the war. The administration's implicit theory of victory: escalation pressure eventually forces regime collapse or surrender.</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — "fleeing the regime" asserted without evidence displaced persons distinguish cause. Rhetoric: regime-change wishful framing. Sourcing partial. Engages counterarguments: no.</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — "verifiable dismantlement" end-state is undefined; escalation-to-victory theory asserted without operational mechanism. Rhetoric: loaded language ("kill bad guys"). Sourcing partial. Engages counterarguments: no.</div>
       </div>
     </div>
 
     <div class="fringe-box">
       <span class="fringe-label">⚡ Fringe / Early Signal</span>
-      Almost zero U.S. mainstream coverage of the 3.2M figure relative to its scale. Compare: 1M Ukrainian displaced in week 1 of the 2022 invasion generated wall-to-wall coverage. The disparity is being named explicitly in international and diaspora press as a racialized media-attention gap. Whether this becomes a domestic political story depends on whether Democratic politicians pick it up — so far they haven't.
+      The "coup against diplomacy" thesis — that the February 28 strike was launched not despite the Oman breakthrough but because of it, by factions within the U.S.-Israeli security apparatus who feared a deal would undercut the war rationale — is circulating in Arab diplomatic circles and in heterodox foreign policy Substacks. Unverifiable from open sources; structurally coherent with the timeline. Worth tracking as pre-war communications become public.
     </div>
   </section>
+
       <section id="topic-plus1" class="topic-section">
     <div class="topic-header">
       <div class="topic-badge badge-o">R1<div class="badge-sub">Rght–Ctr</div></div>
       <div class="topic-meta">
-        <div class="topic-zone">Business · Venture Capital · Industrial Tech</div>
-        <div class="topic-title">Humanoid Robots Enter Mass Production: Figure AI at $48B, OpenAI Eyes $1T IPO, LeCun's JEPA Bet</div>
-        <div class="topic-desc">What serious money, center-right business press, and the venture/industrial complex are focused on — largely independent of the war cycle.</div>
+        <div class="topic-zone">Fiscal · Congressional Politics · War Funding</div>
+        <div class="topic-title">The $200 Billion Ask: Pentagon's Supplemental, GOP Cracks, and the War Without a Budget</div>
+        <div class="topic-desc">What center-right fiscal conservatives, congressional Republicans, and the institutional right are actually debating today — whether this war can be funded and governed.</div>
       </div>
     </div>
 
     <div class="source-block src-b">
       <div class="source-header">
         <span class="source-dot" style="background:var(--clr-b)"></span>
-        <span class="source-name">Crunchbase / Bloomberg / WSJ</span>
-        <span class="source-placement">center-right business</span>
+        <span class="source-name">Washington Post / CNN Politics / NPR</span>
+        <span class="source-placement">center</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>Figure AI closed Series D at $48B valuation with Amazon committing to 20,000-unit warehouse deployment. Production at 1,200 units/month targeting 5,000/month by Q4 2026.</li>
-          <li>Nscale raised $2B (Series C, $14.6B valuation) — largest tech funding round in European history — backed by NVIDIA, Citadel, Dell, and Jane Street. Sheryl Sandberg and Nick Clegg joined the board.</li>
-          <li>Yann LeCun's AMI Labs raised $1.03B seed round (largest European seed round ever) to build world models on JEPA architecture. Backed by Bezos, NVIDIA, Samsung, Temasek.</li>
-          <li>Robotics funding: 2026 on pace for $20B+. Four firms raised $1.2B in a single week.</li>
-          <li>OpenAI laying groundwork for H2 2026 IPO at potential $1T valuation. xAI-SpaceX combined entity targeting June 2026 IPO at up to $1.5T.</li>
+          <li>The Pentagon has formally requested more than $200 billion in a supplemental appropriations bill — more than the entire annual defense budget of every country on Earth except the United States.</li>
+          <li>The total package comes on top of a record $1.5 trillion Defense Department budget request for FY2027. The U.S. is currently spending ~$1 billion/day on the war.</li>
+          <li>Key GOP fractures: Sen. Lisa Murkowski (R-AK) says she won't fund more money until the White House outlines a plan. GOP leaders do not believe they have the votes even within their caucus without a detailed strategy.</li>
+          <li>The war has no AUMF, no supplemental budget yet, no defined end-state, and no timeline. Hegseth, asked for a timeline: "No timeframe."</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — deal terms, named investors, production figures verifiable. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: partially.</div>
-      </div>
-    </div>
-
-    <div class="source-block src-g">
-      <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-g)"></span>
-        <span class="source-name">Foundation Capital / VentureBeat</span>
-        <span class="source-placement">center-right tech</span>
-      </div>
-      <div class="source-body">
-        <ul class="args">
-          <li>Capital pattern of 2026: not "AI as software" but "AI as physical infrastructure" — compute clusters, humanoid bodies, energy supply. The constraint is no longer model capability; it's electrons and physical deployment.</li>
-          <li>Pentagon contracts for autonomous systems, ISR, and logistics AI are accelerating. Palantir, Anduril, and Scale AI are war-contract beneficiaries.</li>
-          <li>LeCun's JEPA bet is the most technically interesting signal — if world models prove superior to LLMs for embodied robotics, it would be the first genuine architectural inflection since the transformer paper.</li>
-        </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — "physical infrastructure" thesis well-supported by funding data; JEPA-vs.-transformer claim technically substantive but contested. Rhetoric: none notable. Sourcing transparent. Engages counterarguments: partially.</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — documented budget figures, named lawmakers, sourced legislative dynamics. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: yes.</div>
       </div>
     </div>
 
     <div class="source-block src-b">
       <div class="source-header">
         <span class="source-dot" style="background:var(--clr-b)"></span>
-        <span class="source-name">Labor economists / AFL-CIO adjacent</span>
-        <span class="source-placement">center-left counterpoint</span>
+        <span class="source-name">The Intercept / Yahoo Finance / Moody's</span>
+        <span class="source-placement">center-left</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>20,000 humanoid robots in Amazon warehouses means displacement of a proportional share of Amazon's 750,000 warehouse workers. No policy framework exists to manage this transition.</li>
-          <li>The $20B+ in robotics investment is occurring simultaneously with a labor market that added only 79,000 jobs last quarter. War-induced slowdown + robot-driven displacement is a political earthquake with no named owner in Washington.</li>
+          <li>Trump called $200B "a small price to pay" — but the bill has no identified offset. War is deficit-financed at a moment when U.S. debt is already at 125% of GDP. The supplemental would add more in a single vote than the entire cost of the Iraq war's first three years.</li>
+          <li>Moody's has set recession odds at 49% based on oil prices and weak labor markets alone — before the supplemental is even considered. The war's fiscal cost is a macro risk multiplier, not just a budget line item.</li>
+          <li>The administration is requesting the money without a war authorization, without a budget offset, and without a defined victory condition — a combination that would have been considered politically impossible before 2025.</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — displacement math factually grounded; political conclusion projected but plausible. Rhetoric: mild alarm. Sourcing transparent. Engages counterarguments: no (doesn't address "robots create new jobs" counterargument).</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — deficit financing math, Moody's data, Iraq cost comparisons factually grounded. Rhetoric: mild outrage framing. Sourcing transparent. Engages counterarguments: partially.</div>
       </div>
     </div>
 
     <div class="source-block src-o">
       <div class="source-header">
         <span class="source-dot" style="background:var(--clr-o)"></span>
-        <span class="source-name">Thiel-adjacent tech nationalists</span>
-        <span class="source-placement">far-right</span>
+        <span class="source-name">Trump / Hegseth / Graham / GOP Hawks</span>
+        <span class="source-placement">center-right to far-right</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>U.S. dominance in humanoid robotics and AI is the true "generational" story — more important than the Iran war. China has competing programs (Unitree, Agibot). Whoever wins the embodied AI race wins the industrial base of the next century.</li>
-          <li>OpenAI and xAI IPOs will be the largest capital mobilization events in history. Retail investors should not be left out — current IPO access structures favor institutional players.</li>
+          <li>The administration frames the war as a generational investment in Middle East stability: if Iran's nuclear program and missile capability are permanently dismantled, the long-term cost savings in deterrence, Israel's security expenditure, and oil market stability justify the outlay.</li>
+          <li>GOP hawks (Graham, Cornyn) are ready to fund without offsets, citing the wartime precedent of deficit-financed military spending.</li>
+          <li>Trump at a Kentucky rally said the U.S. has "won" the war. The awkward silence from the crowd — noted by multiple press accounts — suggests even the base is skeptical.</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — U.S.-China robotics competition real and evidenced; retail access argument is advocacy. Rhetoric: nationalistic framing ("whoever wins"). Sourcing partial. Engages counterarguments: no.</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — long-term investment payoff is entirely speculative; "won" claim not supported by any defined war-aim metric. Rhetoric: wartime historical precedent framing, undefined victory. Sourcing partial. Engages counterarguments: no.</div>
       </div>
     </div>
 
     <div class="fringe-box">
       <span class="fringe-label">⚡ Fringe / Early Signal</span>
-      LeCun's AMI Labs JEPA raise is being watched in AI-safety circles as a potential paradigm shift. JEPA-based world models don't require the same RLHF alignment techniques as transformers — which means the entire current AI safety apparatus (Constitutional AI, RLHF, red-teaming) may be partially irrelevant if JEPA architecture dominates robotics. Very early. Structurally important.
+      Some fiscal conservatives and libertarian-adjacent Republicans are privately floating the argument that the $200B supplemental is the actual domestic political kill shot for the war — that if leadership is forced to vote on it without a defined victory condition, the MAGA antiwar bloc will use the vote to formally break with the White House. The "quiet kill" theory: let the budget process stop the war that the war powers process can't. Early, not yet public strategy — but structurally coherent.
     </div>
   </section>
     </div>
@@ -982,145 +883,127 @@ footer a:hover { color: var(--text-primary); }
     <div class="topic-header">
       <div class="topic-badge badge-r">L2<div class="badge-sub">Far Left</div></div>
       <div class="topic-meta">
-        <div class="topic-zone">Cultural · Anti-Imperialist Sphere</div>
-        <div class="topic-title">The Oscars as Wartime Ritual: Cultural Resistance, Spectacle &amp; the Limits of Hollywood Dissent</div>
-        <div class="topic-desc">What the far-left cultural-Marxist and anti-imperialist sphere is talking about this week — not the war itself, but what the ceremony's symbolic apparatus reveals about power and resistance.</div>
-      </div>
-    </div>
-
-    <div class="source-block src-o">
-      <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-o)"></span>
-        <span class="source-name">Jacobin / Palestinian Chronicle / Al Jazeera Culture</span>
-        <span class="source-placement">far-left · anti-imperialist</span>
-      </div>
-      <div class="source-body">
-        <ul class="args">
-          <li>Bardem's "No a la Guerra" pin — the same pin worn in 2003 — proves U.S. empire operates on a 23-year cycle of identical wars with identical cultural co-optation. The Oscars stage is not resistance; it's managed release.</li>
-          <li>A documentary winner's speech about governments murdering people and oligarchs capturing media was the evening's most structurally subversive moment — and the most ignored.</li>
-          <li>The cultural apparatus normalized war in three weeks. Hollywood Reporter's "What If We Went to War and the Oscars Didn't Care?" is itself the symptom.</li>
-          <li>Priyanka Chopra's viral discomfort read as the face of comprador liberal integration — non-Western celebrity class that benefits from empire while performing neutrality.</li>
-          <li>Politics "relegated to the background" — scattered speeches, pins, mostly entertainment framing. Far-left reading: this is the design, not the failure.</li>
-        </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning medium. Rhetoric: conspiratorial managed-dissent framing; us/them (artists-who-speak vs. sellouts). Sourcing partial. Engages counterarguments: no.</div>
-      </div>
-    </div>
-
-    <div class="source-block src-r">
-      <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-r)"></span>
-        <span class="source-name">NewsBusters / OutKick / GB News</span>
-        <span class="source-placement">far-right counterpoint</span>
-      </div>
-      <div class="source-body">
-        <ul class="args">
-          <li>"The Oscars are back to being a woke disaster." Bardem "hijacked the broadcast for a Free Palestine lecture" — a Spanish national lecturing Americans about their president's war.</li>
-          <li>Hollywood dissent is too loud, too unchallenged, too global. Priyanka Chopra's discomfort is the sensible reaction.</li>
-          <li>"Hollywood elites lecturing the peasants about geopolitics" — the show's politics are framed as alienating "real Americans" who support the war.</li>
-        </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — "woke disaster" is pure assertion; no engagement with substance of Bardem's claims. Rhetoric: strong populist us/them, loaded language ("hijacked"). Sourcing partial. Engages counterarguments: no.</div>
+        <div class="topic-zone">Human Rights · IHL · Anti-Imperialist Accountability</div>
+        <div class="topic-title">The Minab School Massacre: IHL Accountability, Civilian Harm, and the Rules of War Nobody Is Applying</div>
+        <div class="topic-desc">What the far-left, anti-imperialist, and international human rights sphere is actually arguing on Day 21 — not the war's strategic rationale, but what the civilian body count reveals about legal accountability and imperial impunity.</div>
       </div>
     </div>
 
     <div class="source-block src-b">
       <div class="source-header">
         <span class="source-dot" style="background:var(--clr-b)"></span>
-        <span class="source-name">Hollywood Reporter / PBS NewsHour / Deadline</span>
-        <span class="source-placement">center</span>
+        <span class="source-name">Amnesty International / TIME / Al Jazeera</span>
+        <span class="source-placement">far-left · human rights</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>The ceremony was largely entertainment-forward — Conan O'Brien ran a "breezy, gag-filled" show. Political moments were real but interstitial, not dominant.</li>
-          <li>Oscars 2026 ends a "politically charged awards season" — earlier shows had more direct protest. By Oscars night, three weeks in, the war was partly normalized in the awards-show format.</li>
-          <li>Antiwar statements came from presenters, not winners' speeches, minimizing their prominence structurally. The Academy responded to the Teyana Taylor security incident faster than to any war statement.</li>
+          <li>The Shajareh Tayyebeh girls' elementary school in Minab, Hormozgan province, was struck on the war's first day by what Amnesty identifies as a U.S.-manufactured Tomahawk missile — a triple tap (three distinct strikes). At least 168 dead, over 100 of them children.</li>
+          <li>Amnesty's findings: "This points to a failure by U.S. forces to take feasible precautions to avoid civilian harm in carrying out the attack, which is a serious breach of international humanitarian law." The school was not a military target by any publicly documented evidence.</li>
+          <li>Total civilian toll from U.S.-Israeli bombing: TIME reports more than 1,000 civilian deaths across the three-week campaign, per human rights monitors. 236 health care sites and 498 schools struck (Just Security data).</li>
+          <li>Iranian authorities forced bereaved families to participate in state-orchestrated funeral ceremonies and used traumatized child survivors for propaganda — Amnesty documents both the U.S. strike and the regime's exploitation of it.</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong. Rhetoric: minimal. Sourcing transparent. Engages counterarguments: yes.</div>
-      </div>
-    </div>
-
-    <div class="fringe-box">
-      <span class="fringe-label">⚡ Fringe / Early Signal</span>
-      A growing contingent in cultural criticism argues that the pin-and-speech format of celebrity dissent has been fully absorbed as entertainment content — generating clicks while producing zero policy friction. The "managed release" thesis is gaining traction in left-cultural journals. Empirical test: whether any follow-on action emerges by the weekend, or the moment dissolves into content cycles.
-    </div>
-  </section>
-      <section id="topic-plus2" class="topic-section">
-    <div class="topic-header">
-      <div class="topic-badge badge-y">R2<div class="badge-sub">Far Right</div></div>
-      <div class="topic-meta">
-        <div class="topic-zone">Hard Money · Libertarian Finance · Geopolitical Heterodox</div>
-        <div class="topic-title">The Petrodollar's Structural Unraveling: Saudi Yuan Oil Sales, Gold at $5,000+, Monetary Architecture of Empire Under Stress</div>
-        <div class="topic-desc">The story the libertarian/Austrian-economics/hard-money and geopolitically heterodox right treats as the most important development of the war — largely ignored in mainstream coverage.</div>
-      </div>
-    </div>
-
-    <div class="source-block src-g">
-      <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-g)"></span>
-        <span class="source-name">Middle East Monitor / House of Saud analysis / Friday Times</span>
-        <span class="source-placement">heterodox · international economic press</span>
-      </div>
-      <div class="source-body">
-        <ul class="args">
-          <li>Saudi Arabia announced it will accept yuan, euros, yen, and digital currencies for oil transactions — the most significant rupture in the petrodollar system since its 1974 establishment. Formal policy shift, not speculation.</li>
-          <li>Iran reportedly conditioning limited Strait of Hormuz passage on cargo being priced in yuan, not dollars. (Single-sourced: unnamed U.S. official to CNN. Treat as unverified.)</li>
-          <li>BRICS bloc (now including Saudi Arabia and Iran) provides institutional architecture for non-dollar oil settlement. The war has accelerated a decade-long trend into a months-long structural rupture.</li>
-          <li>The U.S. is spending $1–2B/day in dollar-denominated debt — simultaneously defending and accelerating the erosion of the order it purports to protect.</li>
-        </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong on Saudi policy shift; Hormuz-yuan conditionality single-sourced and unverified. Rhetoric: some "empire collapse" framing. Sourcing mixed. Engages counterarguments: partially.</div>
-      </div>
-    </div>
-
-    <div class="source-block src-g">
-      <div class="source-header">
-        <span class="source-dot" style="background:var(--clr-g)"></span>
-        <span class="source-name">GoldSilver.com / CNBC Markets / TradingKey</span>
-        <span class="source-placement">hard-money · libertarian finance</span>
-      </div>
-      <div class="source-body">
-        <ul class="args">
-          <li>Gold touched $5,400/oz; now in $5,000–5,200 range. Counter-intuitive: oil surge stoking inflation fears, reducing rate-cut expectations, strengthening the dollar — which suppresses gold in the short term even as long-term structural demand accelerates.</li>
-          <li>J.P. Morgan targets $6,300/oz by year-end 2026. Deutsche Bank: $6,000. Short-term dollar strength vs. long-term gold bull case is the core trade tension.</li>
-          <li>Central banks in China, Turkey, and Gulf states accelerating gold purchases — institutional de-dollarization through reserve accumulation, not headline policy announcements.</li>
-        </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — price data, institutional forecasts, reserve data sourced. Rhetoric: mild doom framing. Sourcing transparent. Engages counterarguments: partially (acknowledges dollar strength as short-term gold headwind).</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — forensic evidence (satellite analysis, Tomahawk identification, triple-tap verification) is methodologically sound for open-source investigation. Rhetoric: some moral urgency. Sourcing transparent. Engages counterarguments: partially (does not address DoD's claim of a co-located military installation).</div>
       </div>
     </div>
 
     <div class="source-block src-y">
       <div class="source-header">
         <span class="source-dot" style="background:var(--clr-y)"></span>
-        <span class="source-name">Tax Research UK / BlockNow / Watcher Guru</span>
-        <span class="source-placement">heterodox left-international · crypto-libertarian</span>
+        <span class="source-name">The Intercept / Jacobin</span>
+        <span class="source-placement">far-left</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>"Is this war all about the dollar?" — a heterodox thesis gaining traction across ideological lines: the Iran war is primarily about defending the petrodollar recycling system that finances U.S. deficit spending.</li>
-          <li>Iran's integration into BRICS yuan-denominated settlement would structurally remove significant dollar oil demand — threatening the mechanism by which the U.S. exports inflation and finances its debt.</li>
-          <li>Bitcoin has outperformed both gold and the S&amp;P 500 since Feb. 28. Crypto community reads this as vindicating the sovereign-money thesis.</li>
+          <li>Neocons, not Trump's own instincts, shaped the targeting doctrine for the opening strikes. Named architects include former NSC officials retained across administrations who argued "rapid shock" targeting of civilian-proximate military infrastructure was acceptable under necessity doctrine.</li>
+          <li>The $200B Pentagon supplemental, if passed, will fund the continuation of strikes that have already killed over 1,000 civilians. The left's argument: voting for the supplemental is voting for the Minab school.</li>
+          <li>There is still no formal AUMF. The war is being conducted under the 2001 AUMF, written for Al-Qaeda. Legal scholars across the spectrum call this plainly unconstitutional.</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — petrodollar-as-war-motive thesis economically coherent but unfalsifiable from public evidence. Rhetoric: conspiratorial "the real reason" framing. Sourcing mixed. Engages counterarguments: no.</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — neocon-influence thesis argued by evidence but causality between individual advisors and specific strike decisions is asserted more than demonstrated. Rhetoric: some conspiratorial framing, moral urgency. Sourcing partial. Engages counterarguments: no.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-r">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-r)"></span>
+        <span class="source-name">DoD / Trump administration</span>
+        <span class="source-placement">far-right counterpoint</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>The Pentagon has not commented publicly on the Minab school specifically. Background briefings cited by AP and Reuters suggest the building was designated proximate to a Republican Guard logistics node. No formal acknowledgment of civilian harm.</li>
+          <li>The administration's framing: Iran places military assets in civilian areas — responsibility for civilian deaths lies with Iran's doctrine of using human shields.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — no public evidence presented that a military target was co-located; responsibility-transfer framing requires factual basis that has not been supplied publicly. Rhetoric: shield framing (responsibility inversion). Sourcing opaque. Engages counterarguments: no.</div>
+      </div>
+    </div>
+
+    <div class="fringe-box">
+      <span class="fringe-label">⚡ Fringe / Early Signal</span>
+      A growing international legal argument holds that because the U.S. launched the war while a diplomatic "breakthrough" was reportedly in progress (Oman announced a deal on February 27, one day before the strikes), the strikes may fail the IHL necessity test at the threshold level — not just in specific targeting decisions. This argument is appearing in academic international law forums and at the ICC's publicly stated pre-investigation review. Early and contested, but structurally significant if the ICC opens a formal inquiry.
+    </div>
+  </section>
+
+      <section id="topic-plus2" class="topic-section">
+    <div class="topic-header">
+      <div class="topic-badge badge-r">R2<div class="badge-sub">Far Right</div></div>
+      <div class="topic-meta">
+        <div class="topic-zone">Populist Right · Paleocon · MAGA Internal Politics</div>
+        <div class="topic-title">MAGA's Antiwar Wing Goes Loud: Tucker, Tulsi's Silence, Joe Kent's Resignation, and the "Declare Victory" Faction</div>
+        <div class="topic-desc">The story the paleoconservative, populist-right, and "America First" wing of conservative media treats as the decisive domestic political fracture — mostly absent from center framing, which focuses on Democratic opposition.</div>
+      </div>
+    </div>
+
+    <div class="source-block src-y">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-y)"></span>
+        <span class="source-name">The American Conservative / CSMonitor / Media Matters</span>
+        <span class="source-placement">heterodox right · paleocon</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Tucker Carlson, Megyn Kelly, and Candace Owens have come out publicly against the war in the name of "America First" — the most prominent right-media figures to break with Trump on a live military operation.</li>
+          <li>CSMonitor (March 20) headline: "MAGA crackup? Influencers pan Iran war — but base backs Trump, for now." Polling shows 79% of 2024 Trump voters want a swift end to the war — not an escalation.</li>
+          <li>Media Matters documents that "some right-wing media figures are urging Trump to declare early victory and leave" — using the political cover of "we denuclearized Iran" to exit before economic costs become the dominant narrative. This is a politically sophisticated faction: they want Trump to win, not the war.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning medium — polling data solid; "declare victory and leave" is documented media strategy, not speculation. Rhetoric: some us/them (America First vs. neocons). Sourcing transparent. Engages counterarguments: partially.</div>
       </div>
     </div>
 
     <div class="source-block src-b">
       <div class="source-header">
         <span class="source-dot" style="background:var(--clr-b)"></span>
-        <span class="source-name">Council on Foreign Relations / dollar-system defenders</span>
-        <span class="source-placement">center counterpoint</span>
+        <span class="source-name">TIME / The Daily Beast / New Republic</span>
+        <span class="source-placement">center</span>
       </div>
       <div class="source-body">
         <ul class="args">
-          <li>The petrodollar is not dying; it is diversifying. The dollar remains 58% of global central bank reserves (down from 71% in 2000 but not in free-fall).</li>
-          <li>Saudi Arabia accepting yuan for some sales is a pricing convenience, not a strategic rupture. The U.S. survived larger debt-to-GDP ratios (WWII: 119%) without a dollar collapse.</li>
-          <li>Gold at $5,000 reflects risk-off demand, not imminent dollar collapse. Every decade since 1970 has seen "petrodollar is dying" theses — none have produced the predicted collapse.</li>
+          <li>Joe Kent, a top DNI counterterrorism official under Gabbard, resigned this week — the first senior Trump administration official to step down over the Iran war. His resignation letter: he cannot "in good conscience" support the war as Iran posed "no imminent threat."</li>
+          <li>Tulsi Gabbard — once one of the most prominent antiwar voices in national politics — is now DNI and publicly silent on the war she previously predicted and warned against. At a Senate hearing this week, Democratic Rep. Ami Bera read her own 2020 quotes back to her.</li>
+          <li>Gabbard omitted the sentence stating Iran had not rebuilt its uranium enrichment capability when reading her opening statement aloud — a gap Sen. Warner flagged: "So you chose to omit the parts that contradict the president."</li>
         </ul>
-        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — historical data, reserve share figures grounded. Rhetoric: mild dismissiveness of structural-change arguments. Sourcing transparent. Engages counterarguments: yes.</div>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning strong — documented facts (Kent resignation letter, hearing transcript, quote omissions all on record). Rhetoric: mild irony framing. Sourcing transparent. Engages counterarguments: yes (notes Gabbard's continued loyalty to Trump even as she navigates the contradiction).</div>
+      </div>
+    </div>
+
+    <div class="source-block src-r">
+      <div class="source-header">
+        <span class="source-dot" style="background:var(--clr-r)"></span>
+        <span class="source-name">Townhall / Graham / GOP Hawks</span>
+        <span class="source-placement">far-right pro-war</span>
+      </div>
+      <div class="source-body">
+        <ul class="args">
+          <li>Townhall (March 20): "The Shadow War Against President Trump" — framing the Gabbard/Kent fracture and Tucker Carlson's antiwar stance as a "deep state" and media operation to undermine a wartime president. The antiwar right has been "manipulated by Iranian influence operations and anti-Trump media."</li>
+          <li>Graham: "I've never felt better about how this ends." The goal is regime change in all but name — an Iran that "cannot build ballistic missiles or continue supporting terrorist groups."</li>
+          <li>The hawks' theory: Trump's silence on a timeline is strategic ambiguity, not absence of a plan. The "awkward silence" at the rally was misread by the media.</li>
+        </ul>
+        <div class="filter-line"><strong>Filter:</strong> Reasoning weak — "deep state manipulation" and Iranian influence framing are conspiracy claims with no sourcing; attributing Tucker Carlson's position to Iranian operations is not supported. Rhetoric: strong us/them, demonization. Sourcing opaque. Engages counterarguments: no.</div>
       </div>
     </div>
 
     <div class="fringe-box">
-      <span class="fringe-label">⚡ Fringe / Early Signal — FLAG: UNVERIFIED</span>
-      The "Hormuz as monetary weapon" thesis — Iran using the Strait closure to accelerate de-dollarization rather than purely as a military/political tactic — is discussed in heterodox financial circles and some Gulf policy analysis. If the yuan-conditioned passage story confirms (currently single-sourced to one unnamed U.S. official), it would be one of the most significant monetary-geopolitical developments in decades. Early. Unverified. Structurally coherent. Track closely.
+      <span class="fringe-label">⚡ Fringe / Early Signal</span>
+      Marjorie Taylor Greene — one of the most Trump-loyal members of Congress — has said the Iran war is a "betrayal of Trump's campaign promises." If she votes against the supplemental, it signals that the MAGA antiwar faction has moved from media commentary into legislative action. Whether she brings 10–15 House Republicans with her could determine whether the war can be funded at all. Worth tracking as the supplemental moves to a vote.
     </div>
   </section>
     </div>
@@ -1128,33 +1011,29 @@ footer a:hover { color: var(--text-primary); }
 
 </main>
 
-<!-- ═══════════════════════════════════════════════════
-     FOOTER
-     ═══════════════════════════════════════════════════ -->
 <footer>
   <em>Sources:</em>
-  <a href="https://www.thenationalnews.com/arts-culture/film-tv/2026/03/16/oscars-2026-stars-display-iran-war-and-gaza-messages-on-red-carpet/">The National — Oscars</a> ·
-  <a href="https://www.pbs.org/newshour/arts/a-politically-charged-awards-season-ends-with-calls-for-peace-at-the-oscars">PBS NewsHour</a> ·
-  <a href="https://www.unhcr.org/news/press-releases/unhcr-3-2-million-iranians-temporarily-displaced-iran-conflict-intensifies">UNHCR — 3.2M displaced</a> ·
-  <a href="https://www.aljazeera.com/news/2026/3/17/irans-neighbours-prepare-for-fallout-as-war-threatens-new-refugee-crisis">Al Jazeera — refugee crisis</a> ·
-  <a href="https://refugees.org/war-in-a-fragile-region-three-issues-to-watch-in-the-middle-east/">USCRI</a> ·
-  <a href="https://fortune.com/2026/03/14/iranian-refugees-displaced-us-israel-war-migration-crisis-europe-turkey/">Fortune — migration crisis</a> ·
-  <a href="https://news.crunchbase.com/venture/2026-tech-startup-trends-ipo-ai-ma/">Crunchbase</a> ·
-  <a href="https://foundationcapital.com/ideas/where-ai-is-headed-in-2026">Foundation Capital</a> ·
-  <a href="https://www.middleeastmonitor.com/20260314-war-oil-and-power-could-the-iran-conflict-shake-the-petrodollar-order/">Middle East Monitor</a> ·
-  <a href="https://goldsilver.com/industry-news/goldsilver-news/gold-price-forecast-2026-fed-iran-and-the-6000-question/">GoldSilver — gold forecast</a> ·
-  <a href="https://watcher.guru/news/brics-unit-could-replace-dollar-as-us-burns-2b-a-day-on-iran-war">Watcher Guru — BRICS</a> ·
-  <a href="https://www.globalsecurity.org/wmd/library/news/iran/2026/03/iran-260315-rferl01.htm">RFE/RL — Central Asia</a>
+  <a href="https://www.amnesty.org/en/latest/news/2026/03/usa-iran-those-responsible-for-deadly-and-unlawful-us-strike-on-school-that-killed-over-100-children-must-be-held-accountable/">Amnesty International — Minab school</a> ·
+  <a href="https://www.cbsnews.com/live-updates/iran-war-israel-strike-south-pars-gas-field-trump-threat-oil-gas-prices/">CBS News — South Pars</a> ·
+  <a href="https://www.cnn.com/2026/03/19/middleeast/iran-qatar-south-pars-gas-field-explainer-intl">CNN — South Pars explainer</a> ·
+  <a href="https://www.pbs.org/newshour/world/iran-intensifies-attacks-on-gulf-energy-sites-after-israel-struck-its-key-gas-field">PBS NewsHour — Gulf energy sites</a> ·
+  <a href="https://www.npr.org/2026/03/20/nx-s1-5754550/israel-strikes-tehran-iran-attacks-gulf">NPR — Israel strikes Tehran / Iran attacks Gulf</a> ·
+  <a href="https://www.aljazeera.com/opinions/2026/3/19/the-us-israel-war-with-iran-will-not-end-with-a-clear">Al Jazeera — off-ramp analysis</a> ·
+  <a href="https://www.crisisgroup.org/stm/middle-east-north-africa/iran-israelpalestine-united-states/finding-ramp-middle-east-war">ICG — Finding an Off-Ramp</a> ·
+  <a href="https://www.axios.com/2026/03/16/iran-war-us-communication-witkoff-araghchi">Axios — back-channel</a> ·
+  <a href="https://www.washingtonpost.com/national-security/2026/03/18/iran-cost-budget-pentagon/">Washington Post — $200B Pentagon</a> ·
+  <a href="https://www.cnn.com/2026/03/19/politics/iran-war-cost-republicans-congress">CNN Politics — GOP cracks</a> ·
+  <a href="https://fortune.com/2026/03/18/economic-recession-odds-increasing-iran-oil-prices-moody/">Fortune — Moody's 49% recession</a> ·
+  <a href="https://www.euronews.com/business/2026/03/18/moodys-says-a-us-recession-is-increasingly-hard-to-avoid-amid-iran-war">Euronews — Moody's warning</a> ·
+  <a href="https://www.csmonitor.com/USA/Politics/2026/0320/trump-iran-maga-base-support">CSMonitor — MAGA crackup</a> ·
+  <a href="https://www.mediamatters.org/us-iran-relations/some-right-wing-media-figures-are-urging-trump-declare-early-victory-and-leave">Media Matters — declare victory</a> ·
+  <a href="https://time.com/article/2026/03/19/tulsi-gabbard-joe-kent-resignation-letter-trump-iran-war-claims-hearing/">TIME — Gabbard / Kent hearing</a> ·
+  <a href="https://www.theamericanconservative.com/yes-magas-fracturing-over-iran/">American Conservative — MAGA fracturing</a> ·
+  <a href="https://townhall.com/columnists/joshhammer/2026/03/20/the-shadow-war-against-president-trump-n2673144">Townhall — Shadow War</a>
   <br><br>
   <em>Per-author perspectives. No synthesis. Apply your own judgment.</em>
 </footer>
 
-<!-- ═══════════════════════════════════════════════════
-     SCROLL BEHAVIOR
-     Shows mini-TOC when full TOC has scrolled out of view.
-     Research basis: newspaper "running header" model —
-     spectrum context persists but never dominates reading.
-     ═══════════════════════════════════════════════════ -->
 <script>
 (function () {
   const fullToc  = document.getElementById('full-toc');
@@ -1162,10 +1041,8 @@ footer a:hover { color: var(--text-primary); }
 
   function onScroll () {
     const tocBottom = fullToc.getBoundingClientRect().bottom;
-    // Show mini-TOC once the full TOC has scrolled above the viewport
     if (tocBottom < 0) {
       miniToc.classList.add('visible');
-      // Nudge scroll-margin on sections to account for mini-toc height
       document.body.style.setProperty('--mini-toc-h', '34px');
     } else {
       miniToc.classList.remove('visible');
@@ -1173,7 +1050,7 @@ footer a:hover { color: var(--text-primary); }
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll(); // run once on load
+  onScroll();
 })();
 </script>
 
